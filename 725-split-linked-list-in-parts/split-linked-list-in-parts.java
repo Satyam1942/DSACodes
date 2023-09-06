@@ -28,9 +28,10 @@ class Solution {
         int sizeExtra  =  sizeNormal+1;
         int nodeExtra = len%k;
 
-        ListNode temp = head;
+        ListNode temp = head, prev = null;
         ListNode[] ans = new ListNode[k];
         int pointer =0;
+        
         while(nodeExtra>0)
         {
             int loopTill = sizeExtra;
@@ -43,7 +44,7 @@ class Solution {
                 loopTill--;
             }
 
-            ListNode prev = temp;
+            prev = temp;
             temp = temp.next;
             prev.next = null;  
 
@@ -65,7 +66,7 @@ class Solution {
             
             if(temp!=null)
             {
-            ListNode prev = temp;
+            prev = temp;
             temp = temp.next;
             prev.next = null; 
             }
