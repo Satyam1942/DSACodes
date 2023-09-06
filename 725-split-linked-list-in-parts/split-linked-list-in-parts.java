@@ -34,14 +34,15 @@ class Solution {
         while(nodeExtra>0)
         {
             int loopTill = sizeExtra;
-            ListNode dummy = temp;
-            ans[pointer] = dummy;
+           
+            ans[pointer] = temp;
 
             while(loopTill>1)
             {
                 temp = temp.next;
                 loopTill--;
             }
+
             ListNode prev = temp;
             temp = temp.next;
             prev.next = null;  
@@ -53,8 +54,7 @@ class Solution {
         while(nodeNormal>0)
         {
             int loopTill = sizeNormal;
-            ListNode dummy = temp;
-            ans[pointer] = dummy;
+            ans[pointer] = temp;
 
             while(loopTill>1)
             {
