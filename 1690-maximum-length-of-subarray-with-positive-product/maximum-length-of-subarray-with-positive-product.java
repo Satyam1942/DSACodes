@@ -4,7 +4,7 @@ class Solution {
         boolean isPositive = true;
         int maxi = 0,len = nums.length;
 
-        for(int i=0;i<nums.length;i++)
+        for(int i=0;i<len;i++)
         {
             if(nums[i]<0)negativeCount++;
         }
@@ -17,10 +17,7 @@ class Solution {
                 isPositive = !isPositive;
 
                 if(!isPositive && negativeCount == 0) {
-                   while(nums[left]>0)
-                   {
-                       left++;
-                   }
+                   while(nums[left]>0) left++;
                    left++;
                    isPositive = true;
                 }
@@ -29,14 +26,10 @@ class Solution {
             {
                 if(!isPositive)
                  {
-                    while(nums[left]>0)
-                   {
-                       left++;
-                   }
+                   while(nums[left]>0) left++;
                    left++;
                    maxi = Math.max(maxi,right-left);
                  }
-
                 left = right+1;
                 right++;
                 isPositive = true;
