@@ -24,17 +24,17 @@ class Solution {
     public ListNode[] splitListToParts(ListNode head, int k) {
         int len = getLength(head);
         int sizeNormal  = len/k;
-        int nodeNormal =  k- len%k;
+        int nodeNormal =  k-len%k;
         int sizeExtra  =  sizeNormal+1;
         int nodeExtra = len%k;
 
         ListNode temp = head, prev = null;
         ListNode[] ans = new ListNode[k];
-        int pointer =0;
-        
+        int pointer =0,loopTill=0;
+
         while(nodeExtra>0)
         {
-            int loopTill = sizeExtra;
+            loopTill = sizeExtra;
            
             ans[pointer] = temp;
 
@@ -54,7 +54,7 @@ class Solution {
 
         while(nodeNormal>0)
         {
-            int loopTill = sizeNormal;
+            loopTill = sizeNormal;
             ans[pointer] = temp;
 
             while(loopTill>1)
