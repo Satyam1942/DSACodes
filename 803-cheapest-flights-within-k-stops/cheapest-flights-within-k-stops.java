@@ -36,19 +36,19 @@ class Solution {
         List<List<Pair>> adjList = new ArrayList<>();
         buildGraph(adjList,flights,n);
 
-        Queue<Triplet> q= new LinkedList<>(); 
+        PriorityQueue<Triplet> pq= new PriorityQueue<>((obj1,obj2)->(obj1.stops - obj2.stops)); 
         int cost[] = new int[n];
 
         Arrays.fill(cost,(int)(1e9));
-        q.add(new Triplet(src,0,-1));
+        pq.add(new Triplet(src,0,-1));
         cost[src] = 0; 
 
-        while(!q.isEmpty())
+        while(!pq.isEmpty())
         {
-            int curNode = q.peek().node;
-            int curWeight = q.peek().weight;
-            int noOfStopsTaken = q.peek().stops;
-            q.poll();
+            int curNode = pq.peek().node;
+            int curWeight = pq.peek().weight;
+            int noOfStopsTaken = pq.peek().stops;
+            pq.poll();
 
             if(noOfStopsTaken>=k) continue;
             for(int i=0;i<adjList.get(curNode).size();i++)
@@ -58,7 +58,7 @@ class Solution {
                 if(cost[nextNode]>additionalWeight+curWeight)
                 {
                     cost[nextNode] = additionalWeight+curWeight;
-                    q.add(new Triplet(nextNode,cost[nextNode],noOfStopsTaken+1));
+                    pq.add(new Triplet(nextNode,cost[nextNode],noOfStopsTaken+1));
                 }
             }
         }
