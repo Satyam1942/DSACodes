@@ -1,21 +1,26 @@
 class Node
 {
-    Node[] arr;
+    Node[] links;
     boolean flag;
     Node()
     {
-        arr = new Node[26];
-        boolean flag = false;
+        links = new Node[26];
+        flag = false;
     }
 
-    public void add(char ch)
+    public boolean containsKey(char ch)
     {
-        arr[ch-97] = new Node();
+        return links[ch-97]!=null;
+    }
+
+    public void put(char ch)
+    {
+        links[ch-97] = new Node();
     }
 
     public Node get(char ch)
     {
-        return arr[ch-97];
+        return links[ch-97];
     }
 
     public void setFlag(boolean ans)
@@ -38,10 +43,11 @@ class Trie {
     public void insert(String word) {
         int lengthOfWord = word.length();
         Node temp = root;
+
         for(int i=0;i<lengthOfWord;i++)
         {
             char ch = word.charAt(i);
-            if(temp.get(ch)==null) temp.add(ch);
+            if(!temp.containsKey(ch)) temp.put(ch);
             temp = temp.get(ch);
         }
         temp.setFlag(true);
@@ -50,10 +56,11 @@ class Trie {
     public boolean search(String word) {
         int lengthOfWord = word.length();
         Node temp = root;
+
         for(int i=0;i<lengthOfWord;i++)
         {
             char ch = word.charAt(i);
-            if(temp.get(ch)!=null) temp = temp.get(ch);
+            if(temp.containsKey(ch)) temp = temp.get(ch);
             else return false;
         }
 
@@ -63,10 +70,11 @@ class Trie {
     public boolean startsWith(String prefix) {
         int lengthOfWord = prefix.length();
         Node temp = root;
+
         for(int i=0;i<lengthOfWord;i++)
         {
             char ch = prefix.charAt(i);
-            if(temp.get(ch)!=null) temp = temp.get(ch);
+            if(temp.containsKey(ch)) temp = temp.get(ch);
             else return false;
         }
         return true;
