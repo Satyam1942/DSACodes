@@ -8,7 +8,7 @@ class Solution {
 
         while(low<=mid && high<=right)
         {
-            if((long)nums[low]>(long)2*(long)nums[high])
+            if((long)nums[low]>2*(long)nums[high])
             {
                 count+= mid-low+1;
                 high++;
