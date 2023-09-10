@@ -1,24 +1,22 @@
 class Solution {
 
-    int rec(int inOrder[] , int left ,int right,int dp[][] )
+    int rec(int n,int dp[])
     {
-        if(right<=left) return 1;
-       if(dp[left][right]!=-1) return dp[left][right];
+        if(n<=1) return 1;
+       if(dp[n]!=-1) return dp[n];
 
         int total=0;
-        for(int i=left;i<=right;i++)
+        for(int i=1;i<=n;i++)
         {
-            total+= rec(inOrder,left,i-1,dp)*rec(inOrder,i+1,right,dp);
+            total+= rec(i-1,dp)*rec(n-i,dp);
         }
-        return dp[left][right] = total;
+        return dp[n] = total;
     }
     public int numTrees(int n) {
-        int inorder[] = new int[n];
-        int dp[][] = new int[n][n];
-        for(int row[] : dp) Arrays.fill(row,-1);
-
-        for(int i=0;i<n;i++)inorder[i]=i+1;
-        return rec(inorder,0,n-1,dp);
+       
+        int dp[]= new int[n+1];
+        Arrays.fill(dp,-1);
+        return rec(n,dp);
 
     }
 }
