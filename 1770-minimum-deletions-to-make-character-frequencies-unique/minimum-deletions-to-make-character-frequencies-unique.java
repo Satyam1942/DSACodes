@@ -2,9 +2,9 @@ class Solution {
     public int minDeletions(String s) {
         int len = s.length();
         //We can also use List here
-        HashSet<Character>[] set = new HashSet[len+1];
+        List<Character>[] set = new ArrayList[len+1];
         char [] freq = new char[26];
-        for(int i=0;i<=len;i++)set[i] = new HashSet<>();
+        for(int i=0;i<=len;i++)set[i] = new ArrayList<>();
 
         for(int i=0;i<s.length();i++)
         {
