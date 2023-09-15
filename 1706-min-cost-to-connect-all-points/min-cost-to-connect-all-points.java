@@ -1,8 +1,54 @@
-class Pair{
-    int node , distance;
-    Pair(int node, int distance)
+class DisjointSet
+{
+    List<Integer> ultParent;
+    List<Integer> size;
+
+    DisjointSet(int n)
     {
-        this.node = node;
+        ultParent = new ArrayList<>();
+        size = new ArrayList<>();
+        for(int i=0;i<n;i++)
+        {
+            ultParent.add(i);
+            size.add(0);
+        }
+    }
+
+    int findUltimateParent(int node)
+    {
+        if(ultParent.get(node)== node) return node;
+
+        int ultimateParent = findUltimateParent(ultParent.get(node));
+        ultParent.set(node,ultimateParent);
+        return ultimateParent;
+    }
+
+    void unionBySize(int u, int v)
+    {
+        int ultimU = findUltimateParent(u);
+        int ultimV = findUltimateParent(v);
+
+        if(ultimU==ultimV) return;
+
+        if(size.get(ultimU)<size.get(ultimV))
+        {
+            ultParent.set(ultimU,ultimV);
+            size.set(ultimV,size.get(ultimU)+size.get(ultimV));
+        }
+        else
+        {
+            ultParent.set(ultimV,ultimU);
+            size.set(ultimU,size.get(ultimU)+size.get(ultimV));    
+        }
+    }
+}
+
+class Triplet{
+    int node1, node2 , distance;
+    Triplet(int node1, int node2, int distance)
+    {
+        this.node1 = node1;
+        this.node2 = node2;
         this.distance = distance;
     }
 }
@@ -19,54 +65,44 @@ class Solution {
         return Math.abs(x1-x2)+ Math.abs(y2-y1);
     }
 
-    public void prepareAdjacencyList(List<List<Pair>> adjList , int n , int [][] points)
+    public void prepareAdjacencyList(List<Triplet> adjList , int n , int [][] points)
     {
-        for(int i=0;i<n;i++) adjList.add(new ArrayList<>());
-
         for(int i=0;i<n;i++)
         {
             for(int j=i+1;j<n;j++)
             {
                 int distance = calcDistance(points[i],points[j]);
-                adjList.get(i).add(new Pair(j,distance));
-                adjList.get(j).add(new Pair(i,distance));
+                adjList.add(new Triplet(j,i,distance));
+                adjList.add(new Triplet(i,j,distance));
             }
         }
+
+        Collections.sort(adjList, (a,b)->(a.distance-b.distance));
     }
 
-    int createMinimumSpanningTree(List<List<Pair>> adjList)
+    int createMinimumSpanningTree(List<Triplet> adjList)
     {
         int len = adjList.size();
-        int vis[] = new int[len];
+        DisjointSet dsu = new DisjointSet(len);
         int cost=0;
-        PriorityQueue<Pair> pq = new PriorityQueue<>((x,y)->(x.distance - y.distance));
-        
-        pq.add(new Pair(0,0));
-
-        while(!pq.isEmpty())
+        for(int i=0;i<len;i++)
         {
-            int curNode = pq.peek().node;
-            int weight = pq.peek().distance;
-            pq.poll();
+            int u = adjList.get(i).node1;
+            int v = adjList.get(i).node2;
+            int wt = adjList.get(i).distance;
 
-            if(vis[curNode]==1) continue;
-            vis[curNode]=1;
-            cost+=weight;
-
-            for(int i = 0;i<adjList.get(curNode).size();i++)
+            if(dsu.findUltimateParent(u)!=dsu.findUltimateParent(v))
             {
-                int adjNode = adjList.get(curNode).get(i).node;
-                int adjWeight = adjList.get(curNode).get(i).distance;
-                pq.add(new Pair(adjNode , adjWeight));
+                cost+=wt;
+                dsu.unionBySize(u,v);
             }
-
         }
 
         return cost;
     }
 
     public int minCostConnectPoints(int[][] points) {
-        List<List<Pair>> adjList = new ArrayList<>();
+        List<Triplet> adjList = new ArrayList<>();
         int n = points.length;
         
         prepareAdjacencyList(adjList, n , points);
