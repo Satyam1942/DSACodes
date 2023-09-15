@@ -104,13 +104,7 @@ class Solution {
     public int minCostConnectPoints(int[][] points) {
         List<Triplet> adjList = new ArrayList<>();
         int n = points.length;
-        
         prepareAdjacencyList(adjList, n , points);
-
         return createMinimumSpanningTree(adjList);
-
-
-
-
     }
 }
