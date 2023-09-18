@@ -26,12 +26,17 @@ class Solution {
 
         for(int i=0;i<m;i++)
         {
-            int tempCount=0;
-            for(int j=0;j<n;j++)
+            int low = 0;
+            int high = n-1;
+            int ceilIndex = -1;
+            while(low<=high)
             {
-                if(mat[i][j]==1) tempCount++;
+                int mid = (low+high)/2;
+                if(mat[i][mid]==1) {ceilIndex= mid ; low = mid+1;}
+                else high =mid-1;
             }
-            soldierArray[i] = tempCount;
+
+            soldierArray[i] = ceilIndex+1;
         }
 
         for(int i=0;i<m;i++)
