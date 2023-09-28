@@ -21,20 +21,20 @@ class CustomComparator implements Comparator<Interval>
     }
 }
 class Solution {
-    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
-        List<Interval> intervals = new ArrayList<>();
-        //build Interval
-        for(int i=0;i<schedule.size();i++){
+
+    void buildIntervals(List<List<Interval>> schedule,List<Interval> intervals)
+    {
+        for(int i=0;i<schedule.size();i++)
+        {
             for(int j=0;j<schedule.get(i).size();j++)
             {
                 intervals.add(schedule.get(i).get(j));
             }
         }
+    }
 
-        Collections.sort(intervals,new CustomComparator());
-
-        //merge interval
-        List<Interval> mergedIntervals = new ArrayList<>();
+    void mergeIntervals(List<Interval> intervals,List<Interval> mergedIntervals)
+    {
         for(int  i = 0;i<intervals.size();i++)
         {
             int curStart = intervals.get(i).start;
@@ -53,11 +53,19 @@ class Solution {
             mergedIntervals.set(mergedIntervals.size()-1,new Interval(prevStart,Math.max(prevEnd,curEnd)));
             }
         }
+    }
 
-    
-       
-        //get free time
+    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+        List<Interval> intervals = new ArrayList<>();
+        List<Interval> mergedIntervals = new ArrayList<>();
         List<Interval> freeTime = new ArrayList<>();
+
+        //build Interval
+        buildIntervals(schedule,intervals);
+        Collections.sort(intervals,new CustomComparator());
+        //merge interval
+        mergeIntervals(intervals,mergedIntervals);
+        //get free time
         for(int i=0;i<mergedIntervals.size()-1;i++)
         {
             int start = mergedIntervals.get(i).end;
