@@ -5,11 +5,10 @@ class Solution {
         height++;
         if(vis[edges.get(node)]==0)
         {
-           dist[node] =  dfsCycle(edges,dist,vis,edges.get(node),height);
-           return dist[node];
+          return dist[node] =  dfsCycle(edges,dist,vis,edges.get(node),height); 
         }
-        dist[node] = height;
-        return height;
+
+        return  dist[node] = height;
     }
 
     void dfsNoCycle(List<Integer> edges, int dist[],int vis[] , int node)
