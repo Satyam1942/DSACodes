@@ -3,11 +3,11 @@ class MyHashMap {
     List<LinkedList<int[]>> map;
     public MyHashMap() {
         map = new ArrayList<>();
-        for(int i=0;i<100000;i++) map.add(new LinkedList<>());
+        for(int i=0;i<(1e5);i++) map.add(new LinkedList<>());
     }
     public int hash(int val)
     {
-        return (val%100000);
+        return (val%((int)1e5));
     }
     public void put(int key, int value) {
         int index = hash(key);
