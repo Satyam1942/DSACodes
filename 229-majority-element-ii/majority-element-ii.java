@@ -1,19 +1,44 @@
 class Solution {
     public List<Integer> majorityElement(int[] nums) {
-Map<Integer,Integer> map = new HashMap<>();
-List<Integer> ans = new ArrayList<>();
-for(int i=0;i<nums.length;i++)
-{
-  int value = map.getOrDefault(nums[i],0);
- map.put(nums[i],value+1); 
-}
-for(Map.Entry<Integer,Integer> it: map.entrySet())
-{
-   if(it.getValue()>(nums.length/3))ans.add(it.getKey());
-}
 
+         List<Integer> majorityElement = new ArrayList<>();
 
-return ans;
- 
+        int majorityElement1= Integer.MAX_VALUE ,majorityElement2=Integer.MIN_VALUE;
+        int count1 =0 ,count2 =0,right =0;
+        while(right<nums.length)
+        {
+            if(nums[right]==majorityElement1) count1++;
+            else if(nums[right]==majorityElement2)count2++;
+            else if(count1==0)
+            {
+                majorityElement1 = nums[right];
+                count1=1;
+            }
+            else if(count2==0)
+            {
+                majorityElement2 = nums[right];
+                count2=1;
+            }
+            else
+            {   
+                count1--;
+                count2--;
+            }   
+            right++;
+        }
+
+       
+        count1=0;count2=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[i]==majorityElement1)count1++;
+            if(nums[i]==majorityElement2)count2++;
+            
+        }
+
+        if(count1>nums.length/3) majorityElement.add(majorityElement1);
+        if(count2>nums.length/3) majorityElement.add(majorityElement2);
+        
+        return majorityElement;
     }
 }
