@@ -1,24 +1,27 @@
 class Solution {
-    int rec(int i , int j, int nums1[], int nums2[], Integer dp[][] )
+    int rec(int i , int j,int check ,  int nums1[], int nums2[], Integer dp[][][] )
     {
-            if(i>=nums1.length && j==0) return Integer.MIN_VALUE;
-            if(j>=nums2.length || i>=nums1.length) return 0;
-            if(dp[i][j]!=null) return dp[i][j];
-            int maxi = Integer.MIN_VALUE;
-            int notTake = rec(i+1,j,nums1,nums2,dp);
-            for(int k = j;k<nums2.length;k++)
+            
+            if(j>=nums2.length ||  i>=nums1.length)
             {
-               int temp =  nums1[i]*nums2[k] + rec(i+1,k+1,nums1,nums2,dp);
-               maxi = Math.max(maxi,temp);
+                if(check==0) return Integer.MIN_VALUE;
+                else return 0;
             }
-            maxi = Math.max(maxi,notTake);
-            return dp[i][j] = maxi;
+           
+
+            if(dp[i][j][check]!=null) return dp[i][j][check];
+            
+            int notTake1 = rec(i+1,j,check,nums1,nums2,dp);
+            int notTake2 = rec(i,j+1,check,nums1,nums2,dp);            
+            int take =  nums1[i]*nums2[j] + rec(i+1,j+1,1, nums1,nums2,dp);
+
+            return dp[i][j][check] = Math.max(take,Math.max(notTake1,notTake2));
     }
     public int maxDotProduct(int[] nums1, int[] nums2) {
         int m = nums1.length;
         int n = nums2.length;
-        Integer dp[][] = new Integer[m][n];
+        Integer dp[][][] = new Integer[m][n][2];
 
-        return rec(0,0,nums1,nums2,dp);
+        return rec(0,0,0,nums1,nums2,dp);
     }
 }
