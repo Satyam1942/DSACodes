@@ -1,17 +1,17 @@
 class Solution {
-    int rec(int index ,int cost[],  Integer dp[])
-    {
-        if(index>=cost.length) return 0;
-        if(dp[index+1]!=null) return dp[index+1];
-
-        int oneStep =  rec(index+1,cost,dp);
-        int twoSteps =  rec(index+2,cost,dp);
-        if(index==-1) return dp[0] = Math.min(oneStep,twoSteps);
-
-        return dp[index+1] = cost[index]+ Math.min(oneStep,twoSteps);
-    }
     public int minCostClimbingStairs(int[] cost) {
-        Integer dp[] = new Integer[cost.length+1];
-        return  rec(-1,cost,dp);
+        Integer dp[] = new Integer[cost.length+3];
+
+        for(int i= cost.length+1;i>=-1;i--)
+        {
+            if(i>=cost.length) {dp[i+1] = 0; continue;}
+             int oneStep =  dp[i+2];
+            int twoSteps =  dp[i+3];
+
+            if(i==-1) dp[0] = Math.min(oneStep,twoSteps);
+            else dp[i+1] = cost[i]+ Math.min(oneStep,twoSteps);
+        }
+
+        return dp[0];
     }
 }
