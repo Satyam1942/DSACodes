@@ -1,6 +1,12 @@
 class Solution {
     int rec(List<List<Integer>>adjList,Integer dp[][],int vis[] ,int[] coins, int k,int curNode,int reduced)
     {
+        //Very very important line
+        /*
+            Why this works because maximum value of cost = 10,000. 
+            So if we divide 10,000/2^14 we will get 0 as integral value. Quite innovative
+
+         */
         if(reduced>13) return 0;
 
         vis[curNode]= 1;
