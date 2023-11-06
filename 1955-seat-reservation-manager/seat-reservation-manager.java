@@ -1,14 +1,14 @@
 class SeatManager {
     
     TreeSet<Integer> unreserved;
-    
+    int smallest;
     public SeatManager(int n) {
         unreserved = new TreeSet<>();
-        for(int i=1;i<=n;i++)unreserved.add(i);
+        smallest = 1;
     }
     
     public int reserve() {
-        int seatNo = unreserved.pollFirst();
+        int seatNo = (unreserved.isEmpty())? smallest++ : unreserved.pollFirst();
         return seatNo;
     }
     
