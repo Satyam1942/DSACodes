@@ -1,19 +1,20 @@
 class Solution {
-    void dfs(int curNode,HashMap<Integer,List<Integer>> map,HashSet<Integer> vis,int[]ans,int pointer)
+    void dfs(int curNode,HashMap<Integer,List<Integer>> map,HashSet<Integer> vis,List<Integer> ans)
     {
         vis.add(curNode);
-        ans[pointer]=curNode;
+        ans.add(curNode);
+
         List<Integer> adjList = map.get(curNode);
         for(int i: adjList)
         {
-            if(!vis.contains(i))  dfs(i,map,vis,ans,pointer+1);
+            if(!vis.contains(i))  dfs(i,map,vis,ans);
         }
     }
 
     public int[] restoreArray(int[][] adjecentPairs) {
         int n = adjecentPairs.length;
         HashMap<Integer,List<Integer>> map = new HashMap<>();
-        int ans[] = new int[n+1];
+        List<Integer> ans = new ArrayList<>();
         int srcNode =0;
 
         for(int i=0;i<n;i++)
@@ -30,7 +31,11 @@ class Solution {
         }
 
         HashSet<Integer> vis = new HashSet<>();
-        dfs(srcNode,map, vis,ans,0);
-        return ans;
+        dfs(srcNode,map, vis,ans);
+
+        int arr[] = new int[n+1];
+        for(int i=0;i<ans.size();i++)arr[i]= ans.get(i);
+
+        return arr;
     }
 }
