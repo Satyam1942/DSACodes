@@ -1,19 +1,37 @@
 class Solution {
     public int maxCoins(int[] piles) {
-        Arrays.sort(piles);
-        int i = piles.length-2,j=0;
-        int maxCoins = 0;
-        while(i>j)
-        {
-            maxCoins+=piles[i];
-            i-=2;
-            j++;
-        }
-        return maxCoins;
+       int size = piles.length;
+       int noOfTurns = size/3;
+       int maxElement = Integer.MIN_VALUE;
+       for(int i=0;i<piles.length;i++) maxElement = Math.max(maxElement, piles[i]);
+
+       int freq[] = new int[maxElement+1];
+       for(int i=0;i<size;i++) freq[piles[i]]++;
+
+        int j = maxElement;
+        boolean myChance = false;
+        int coins = 0; 
+
+       while(noOfTurns>0)
+       {
+           if(myChance) { coins+=j; noOfTurns--; }
+            freq[j]--;
+            while(freq[j]==0) j--;
+            myChance = !myChance;      
+       }
+
+        return coins;
+
     }
 }
-
 /*
-     2 3 4 5 6 7 
-    1 2 2 4 7 8
+1-1
+2-2
+3-1
+4-1
+5-1
+6-1
+7-1
+8-1
+9-1
  */
