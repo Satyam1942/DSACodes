@@ -1,11 +1,9 @@
 class Solution {
     public int[] getSumAbsoluteDifferences(int[] nums) {
+
         int differenceMaxVal  =  0;
         int length = nums.length;
-        for(int i=0;i<length;i++)
-        {
-            differenceMaxVal+= Math.abs(nums[length-1]-nums[i]);
-        }
+        for(int i=0;i<length;i++) differenceMaxVal+= Math.abs(nums[length-1]-nums[i]);
 
         int ans[] = new int[length];
         ans[length-1] =  differenceMaxVal;
@@ -16,12 +14,13 @@ class Solution {
             ans[i] = differenceMaxVal + ((length-i-1)-(i+1))*difNextNum; 
             differenceMaxVal = ans[i];
         }
-        
+
         return ans;
     }
 }
 
 /*
+Explanation:
 5-  
 3,2,0 =5 
 3-
