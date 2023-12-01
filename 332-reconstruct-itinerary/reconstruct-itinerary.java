@@ -1,5 +1,5 @@
 class Solution {
-    void dfs(String node, HashMap<String,PriorityQueue<String>> adjList,Stack<String> itinerary, int ticketsLeft)
+    void dfs(String node, HashMap<String,PriorityQueue<String>> adjList,Stack<String> itinerary)
     {
        
         if(adjList.get(node)!=null)
@@ -8,7 +8,7 @@ class Solution {
         while(!pq.isEmpty())
         {   
             String adjNode= pq.poll();
-            dfs(adjNode,adjList,itinerary,ticketsLeft-1); 
+            dfs(adjNode,adjList,itinerary); 
         }
         }
         
@@ -18,7 +18,7 @@ class Solution {
     public List<String> findItinerary(List<List<String>> tickets) {
 
         HashMap<String,PriorityQueue<String>> adjList = new HashMap<>();
-        int totalTickets = tickets.size();
+        
 
         for(int i=0;i<tickets.size();i++)
         {
@@ -30,7 +30,7 @@ class Solution {
 
         Stack<String> itinerary = new Stack<>();
 
-        dfs("JFK",adjList,itinerary,totalTickets);
+        dfs("JFK",adjList,itinerary);
 
         List<String> ans = new ArrayList<>();
         while(!itinerary.isEmpty()) ans.add(itinerary.pop());
