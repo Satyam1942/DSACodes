@@ -4,7 +4,7 @@ class Solution {
     {
         int left = 0;
         int right = sorted.size()-1;
-        int maxIndex = right+1;
+        int maxIndex = right;
         while(left<=right)
         {
             int mid = (left+right)/2;
@@ -24,9 +24,12 @@ class Solution {
         for(int i=1;i<envelopes.length;i++)
         {
             int height = envelopes[i][1];
-            int index = getFloorIndex(sorted,height);
-            if(index>=sorted.size()) sorted.add(height);
-            else sorted.set(index,height);
+            if(height>sorted.get(sorted.size()-1)) sorted.add(height);
+            else
+            {
+                int index = getFloorIndex(sorted,height);
+                sorted.set(index,height);
+            }
         }
         
         return sorted.size();
