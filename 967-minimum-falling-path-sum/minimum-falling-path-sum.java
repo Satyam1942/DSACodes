@@ -1,22 +1,4 @@
-class Solution {
-    int rec(int row,int col ,int matrix[][],int m, int n, Integer dp[][])
-    {
-        if(row == m-1) return dp[row][col] = matrix[row][col];
-
-        if(dp[row][col]!=null) return dp[row][col];
-
-        int temp1=Integer.MAX_VALUE,temp2=Integer.MAX_VALUE,temp3=Integer.MAX_VALUE;
-        if(row+1<m) temp1 = rec(row+1,col,matrix,m,n,dp);
-        if(row+1<m && col+1<n) temp2 =  rec(row+1,col+1,matrix,m,n,dp);
-        if(row+1<m && col-1>=0) temp3 = rec(row+1,col-1,matrix,m,n,dp);
-
-        int down = (temp1!=Integer.MAX_VALUE)? matrix[row][col] + temp1: temp1;
-        int rightDiag = (temp2!=Integer.MAX_VALUE)? matrix[row][col]  + temp2: temp2 ;
-        int leftDiag = (temp3!=Integer.MAX_VALUE)? matrix[row][col] + temp3: temp3 ;
-
-        return dp[row][col] = Math.min(down,Math.min(leftDiag,rightDiag));
-    }
-
+class Solution {  
     public int minFallingPathSum(int[][] matrix) {
 
         int m = matrix.length;
@@ -24,12 +6,27 @@ class Solution {
         int mini = Integer.MAX_VALUE;
         Integer dp[][] = new Integer[m][n];
 
-        for(int i=0;i<n;i++)
+        for(int i=0;i<n;i++) dp[m-1][i] = matrix[m-1][i];
+
+        for(int row = m-2;row>=0;row--)
         {
-            int temp = rec(0,i,matrix,m,n,dp);
-            System.out.println(temp);
-            mini = Math.min(mini,temp);
-        }     
+        for(int col = n-1;col>=0;col--)
+        {
+        int temp1=Integer.MAX_VALUE,temp2=Integer.MAX_VALUE,temp3=Integer.MAX_VALUE;
+        
+        if(row+1<m) temp1 = dp[row+1][col];
+        if(row+1<m && col+1<n) temp2 =  dp[row+1][col+1];
+        if(row+1<m && col-1>=0) temp3 = dp[row+1][col-1];
+
+        int down = (temp1!=Integer.MAX_VALUE)? matrix[row][col] + temp1: temp1;
+        int rightDiag = (temp2!=Integer.MAX_VALUE)? matrix[row][col]  + temp2: temp2 ;
+        int leftDiag = (temp3!=Integer.MAX_VALUE)? matrix[row][col] + temp3: temp3 ;
+
+        dp[row][col] = Math.min(down,Math.min(leftDiag,rightDiag));
+        }
+        }
+
+        for(int i=0;i<n;i++) mini = Math.min(mini,dp[0][i]);
 
         return mini;
 
