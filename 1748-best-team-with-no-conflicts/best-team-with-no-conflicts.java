@@ -1,19 +1,4 @@
 class Solution {
-    int rec(int index, int prevIndex , int[][] map,  Integer dp[][])
-    {
-        if(index==map.length)  return 0;
-        if(dp[index][prevIndex]!=null) return dp[index][prevIndex];
-
-        int take = Integer.MIN_VALUE;
-        if(prevIndex-1==-1 || map[index][1]>=map[prevIndex-1][1]) 
-        take = map[index][1]+rec(index+1,index+1,map,dp);
-
-        int notTake = rec(index+1,prevIndex,map,dp);
-
-        return dp[index][prevIndex] = Math.max(take,notTake);
-    }
-
-
     public int bestTeamScore(int[] scores, int[] ages) {
         int noOfPlayers = scores.length;
        int[][] map = new int[scores.length][2];
@@ -25,8 +10,23 @@ class Solution {
 
        Arrays.sort(map,(a,b)->((a[0]==b[0])?a[1]-b[1]:a[0]-b[0]));
 
-        Integer dp[][] = new Integer[noOfPlayers+1][noOfPlayers+1];
-       return rec(0,0,map,dp);
+        int dp[][] = new int[noOfPlayers+1][noOfPlayers+1];
+        for(int index = noOfPlayers-1;index>=0;index--)
+        {
+            for(int prevIndex = noOfPlayers;prevIndex>=0;prevIndex--)
+            {
+                int take = Integer.MIN_VALUE;
+                if(prevIndex-1==-1 || map[index][1]>=map[prevIndex-1][1]) 
+                 take = map[index][1]+ dp[index+1][index+1];
+
+                int notTake = dp[index+1][prevIndex];
+
+                dp[index][prevIndex] = Math.max(take,notTake);   
+            }
+        }
+
+
+       return dp[0][0];
     }
 }
 
