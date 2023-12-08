@@ -17,11 +17,11 @@ class Solution {
     String preOrderTraversal(TreeNode root)
     {
         if(root==null) return "";
-         String h = String.valueOf(root.val);
+        String h = root.val +"";
         if(root.left==null && root.right==null)  return h;
-         String left  = "(" + preOrderTraversal(root.left)+")";
-         if(root.right==null) return h+left;
-         String right =  "("+preOrderTraversal(root.right)+")";
+        String left  = "(" + preOrderTraversal(root.left)+")";
+        if(root.right==null) return h+left;
+        String right =  "("+preOrderTraversal(root.right)+")";
 
         return h+left+right;
 
