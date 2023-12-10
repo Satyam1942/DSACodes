@@ -1,17 +1,19 @@
 class Solution {
-    int  rec(int i, int j, int[] piles,  Integer dp[][])
-    {
-        if(i>j)  return 0;
-        if(dp[i][j]!=null) return dp[i][j];
-        int takeFirst = piles[i]- rec(i+1,j,piles,dp);
-        int takeLast =  piles[j]- rec(i,j-1,piles,dp);
-        return dp[i][j] = Math.max(takeFirst,takeLast);
-       
-    }
-
     public boolean stoneGame(int[] piles) {
         int n =piles.length;
-        Integer dp[][] = new Integer[n][n];
-        return rec(0,piles.length-1,piles,dp)>0;
+        int  dp[][] = new int[n+1][n+1];
+
+        int i=0,j=n-1;
+        while(i<=j)
+        {  
+            
+            int takeFirst = piles[i]-dp[i+1][j];
+            int takeLast =  piles[j-1]-dp[i][j-1];
+            dp[i][j] = Math.max(takeFirst,takeLast);
+            i++;
+            j--;
+        }
+
+        return dp[0][piles.length-1]>0;
     }
 }
