@@ -25,7 +25,6 @@ class Solution {
             j++;
         }
         
-        System.out.println(mid+" "+totalTurns);
         return totalTurns<=k;
     }
     
