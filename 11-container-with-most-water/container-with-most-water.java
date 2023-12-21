@@ -1,16 +1,14 @@
 class Solution {
-    public int maxArea(int[] height) {
-    int right =0,left = height.length-1;
-    int maxi =0;
-        while(right<left)
+    public int maxArea(int[] lines) {
+    int i=0,j= lines.length-1;
+        int maxArea = 0;
+
+        while(i<j)
         {
-             int area = Math.min(height[right],height[left])*(left-right);
-                maxi = Math.max(maxi,area);
-
-            if(height[right] <=height[left]) {  right++;continue;}
-            else{left--; continue;}
+            maxArea = Math.max(maxArea,(j-i)*Math.min(lines[i],lines[j]));
+            if(lines[i]>lines[j])j--;
+            else i++;
         }
-
-        return maxi;
+        return maxArea;
     }
 }
