@@ -1,27 +1,22 @@
 class Solution {
     public int characterReplacement(String s, int k) {
-        int length = s.length();
+     
         int longestSubstring = 0;
-        for (char ch = 'A'; ch <= 'Z'; ch++) {
-            int left = 0, right = 0;
-            int temp = k;
-            int maxLength = 0;
-
-            while (right <= length) {
-                if (temp < 0) {
-                    maxLength = Math.max(right - left - 1, maxLength);
-                    if (s.charAt(left) != ch) temp++;
-                    left++;
-                    continue;
-                }
-                if (right == length)  maxLength = Math.max(right - left, maxLength);
-                if (right < length && s.charAt(right) != ch) temp--;
-                right++;
-            }
-            longestSubstring = Math.max(longestSubstring, maxLength);
+        int freq[] = new int[26];
+        int maxFreq = 0;
+        for(int i=0;i<s.length();i++)
+        {
+                maxFreq = Math.max(maxFreq,++freq[(int)s.charAt(i)-65]);
+                if(longestSubstring-maxFreq+1<=k) longestSubstring++;
+                else freq[(int)s.charAt(i-longestSubstring)-65]--;
         }
 
         return longestSubstring;
 
     }
 }
+/*
+    A,B
+    longestSubstring = 1;
+    maxFreq = 1
+ */
