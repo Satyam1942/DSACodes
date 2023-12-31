@@ -1,5 +1,5 @@
 class Solution {
-    boolean isPossibleToStoreBoxes(int warehouse[], int boxes[], int noOfBoxes)
+    int numberOfBoxes(int warehouse[], int boxes[])
     {
 	int boxCount = 0;
 	int length = warehouse.length;
@@ -18,33 +18,22 @@ class Solution {
         i--;
     }   
 
-    return boxCount>=noOfBoxes && length>=noOfBoxes;
+    return boxCount;
     }
 
     public int maxBoxesInWarehouse(int[] boxes, int[] warehouse) {
         Arrays.sort(boxes);
         int length = warehouse.length;
+
         int maximumSizeOfBox[] = new int[length];
         int minimumHeightOfBox = Integer.MAX_VALUE;
+
         for (int i = 0; i < length; i++) {
             minimumHeightOfBox = Math.min(minimumHeightOfBox, warehouse[i]);
             maximumSizeOfBox[i] = minimumHeightOfBox;
         }
-        
-        int totalBoxes = boxes.length;
-        int left = 0;
-        int right = totalBoxes;
-        int maximumBoxes = 0;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (isPossibleToStoreBoxes(maximumSizeOfBox, boxes, mid)) {
-                left = mid + 1;
-                maximumBoxes = mid;
-            } else
-                right = mid - 1;
-        }
-
-        return maximumBoxes;
+   
+        return  numberOfBoxes(maximumSizeOfBox, boxes);
 
     }
 }
