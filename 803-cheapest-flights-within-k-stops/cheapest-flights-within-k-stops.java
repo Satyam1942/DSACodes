@@ -36,7 +36,7 @@ class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
         List<List<Pair>> adjList = buildGraph(flights, n);
 
-        Queue<Triplet> pq = new LinkedList<>();
+        PriorityQueue<Triplet> pq = new PriorityQueue<>((a,b)->(a.stops-b.stops));
         int price[] = new int[n];
         Arrays.fill(price, Integer.MAX_VALUE);
 
@@ -48,17 +48,14 @@ class Solution {
             int curPrice = pq.peek().price;
             int stopsTaken = pq.peek().stops;
             pq.poll();
-            if (curNode == dst && stopsTaken <= k + 1)
-                continue;
-            if (stopsTaken > k)
+            if (stopsTaken >=k+1)
                 continue;
 
             for (int index = 0; index < adjList.get(curNode).size(); index++) {
                 int adjNode = adjList.get(curNode).get(index).node;
                 int pathPrice = adjList.get(curNode).get(index).price;
 
-                if (price[adjNode] > pathPrice + curPrice && 
-                (stopsTaken+1<=k|| (adjNode==dst && stopsTaken<=k+1)))
+                if (price[adjNode] > pathPrice + curPrice)
                  {
                     price[adjNode] = pathPrice + curPrice;
                     pq.add(new Triplet(adjNode, price[adjNode], stopsTaken + 1));
