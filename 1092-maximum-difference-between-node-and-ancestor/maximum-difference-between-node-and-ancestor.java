@@ -13,15 +13,6 @@
  * }
  * }
  */
-class Pair {
-    int min, max;
-
-    Pair(int min, int max) {
-        this.min = min;
-        this.max = max;
-    }
-
-}
 
 class Solution {
     int maxDif = 0;
