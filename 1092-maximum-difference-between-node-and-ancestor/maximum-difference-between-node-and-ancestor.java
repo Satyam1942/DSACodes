@@ -26,35 +26,24 @@ class Pair {
 class Solution {
     int maxDif = 0;
 
-    Pair traversal(TreeNode root) {
+    void traversal(TreeNode root, int maxi, int mini) {
         if (root == null)
-            return new Pair(Integer.MAX_VALUE, Integer.MIN_VALUE);
+            return;
 
-        Pair left = traversal(root.left);
+        int difMax = Math.abs(root.val - maxi);
+        int difMin = Math.abs(root.val - mini);
 
-        int difMax = Math.abs(root.val - left.max);
-        int difMin = Math.abs(root.val - left.min);
-        if (left.max != Integer.MIN_VALUE)
-            maxDif = Math.max(maxDif, difMax);
-        if (left.min != Integer.MAX_VALUE)
-            maxDif = Math.max(maxDif, difMin);
+        maxDif = Math.max(maxDif, Math.max(difMax, difMin));
 
-        Pair right = traversal(root.right);
+        int newMaxi = Math.max(root.val, maxi);
+        int newMini = Math.min(root.val, mini);
+        traversal(root.left, newMaxi, newMini);
+        traversal(root.right, newMaxi, newMini);
 
-        difMax = Math.abs(root.val - right.max);
-        difMin = Math.abs(root.val - right.min);
-        if (right.max != Integer.MIN_VALUE)
-            maxDif = Math.max(maxDif, difMax);
-        if (right.min != Integer.MAX_VALUE)
-            maxDif = Math.max(maxDif, difMin);
-
-        int nextMax = Math.max(left.max, Math.max(root.val, right.max));
-        int nextMin = Math.min(left.min, Math.min(root.val, right.min));
-
-        return new Pair(nextMin, nextMax);
     }
+
     public int maxAncestorDiff(TreeNode root) {
-        traversal(root);
+        traversal(root,root.val,root.val);
         return maxDif;
     }
 }
