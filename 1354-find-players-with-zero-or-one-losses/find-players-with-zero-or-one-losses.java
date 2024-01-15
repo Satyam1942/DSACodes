@@ -29,7 +29,6 @@ class Solution {
         //answer[0] = all nodes with indegree 0
         //answer[1] = all nodes with indegree 1
 
-        Arrays.sort(matches,(a,b)->((a[0]==b[0])?a[1]-b[1]:a[0]-b[0]));
         HashMap<Integer,List<Integer>> adjList = new HashMap<>();
         HashMap<Integer,Integer> indegree =  new HashMap<>();
         List<List<Integer>> answer = new ArrayList<>();
