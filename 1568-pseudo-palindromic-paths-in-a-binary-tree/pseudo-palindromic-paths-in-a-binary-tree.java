@@ -15,52 +15,35 @@
  */
 class Solution {
 
-    boolean checkIfPalindromPossible(HashMap<Integer, Integer> digitMap) {
-
-        int lengthOfNum = 0;
+    boolean checkIfPalindromPossible(int digitMap) {
         boolean flag = false;
-
-        for (Map.Entry<Integer, Integer> i : digitMap.entrySet()) {
-             int freq = i.getValue();
-             lengthOfNum+=freq;
-        }
-
-        for (Map.Entry<Integer, Integer> i : digitMap.entrySet()) {
-            int freq = i.getValue();
-            if (freq % 2 != 0) {
-                if (lengthOfNum % 2 == 0)
-                    return false;
-                else {
-                    if (flag)
+        for(int i=1;i<=9;i++){
+            if((digitMap&(1<<i))!=0)
+                {
+                    if(flag)
                         return false;
-                    else
+                    else 
                         flag = true;
                 }
-            }
         }
-
         return true;
     }
 
-    int traversal(TreeNode node, HashMap<Integer, Integer> digitMap) {
+    int traversal(TreeNode node, int digitMap) {
 
         if (node == null)
             return 0;
 
         if (node.left == null && node.right == null) {
             int nodeVal = node.val;
-            int freq = digitMap.getOrDefault(nodeVal, 0);
-            digitMap.put(nodeVal, freq + 1);
+             digitMap = (digitMap^(1<<nodeVal));
 
             int res = 0;
 
             if (checkIfPalindromPossible(digitMap))
                 res = 1;
 
-            if (freq == 0)
-                digitMap.remove(nodeVal);
-            else
-                digitMap.put(nodeVal, freq);
+            digitMap = (digitMap^(1<<nodeVal));
 
             return res;
         }
@@ -68,23 +51,19 @@ class Solution {
         int leftCount = 0, rightCount = 0;
 
         int nodeVal = node.val;
-        int freq = digitMap.getOrDefault(nodeVal, 0);
-        digitMap.put(nodeVal, freq + 1);
+        digitMap = (digitMap^(1<<nodeVal));
 
         leftCount = traversal(node.left, digitMap);
         rightCount = traversal(node.right, digitMap);
 
-        if (freq == 0)
-            digitMap.remove(nodeVal);
-        else
-            digitMap.put(nodeVal, freq);
+         digitMap = (digitMap^(1<<nodeVal));
 
         return leftCount + rightCount;
 
     }
 
     public int pseudoPalindromicPaths(TreeNode root) {
-        HashMap<Integer, Integer> digitMap = new HashMap<>();
+        int digitMap = 0;
         return traversal(root, digitMap);
     }
 }
