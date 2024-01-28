@@ -41,7 +41,6 @@ class Solution {
                  tempSum += sumClass.sumRegion(row1,col,row2,col);
                  count+=storeSumFreq.getOrDefault(tempSum-target,0);
                  storeSumFreq.put(tempSum,storeSumFreq.getOrDefault(tempSum,0)+1);
-                 
                  col++;
                 }
             }
