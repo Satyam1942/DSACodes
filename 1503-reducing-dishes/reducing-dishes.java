@@ -1,21 +1,33 @@
 class Solution {
-    int maxCoefficient(int index, int prevCooked, int satisfaction[], Integer cache[][]) {
-
-        if (index == satisfaction.length)
-            return 0;
-        if (cache[index][prevCooked] != null)
-            return cache[index][prevCooked];
-
-        int notTake = maxCoefficient(index + 1, prevCooked, satisfaction, cache);
-        int take = satisfaction[index] * (prevCooked + 1) +
-                maxCoefficient(index + 1, prevCooked + 1, satisfaction, cache);
-
-        return cache[index][prevCooked] = Math.max(take, notTake);
-    }
 
     public int maxSatisfaction(int[] satisfaction) {
+        int length = satisfaction.length;
         Arrays.sort(satisfaction);
-        Integer cache[][] = new Integer [satisfaction.length][satisfaction.length+1];
-        return maxCoefficient(0,0,satisfaction,cache);
+        Integer suffixSum[] = new Integer[length];
+
+        int sum = 0;
+        for (int i = 0; i < length; i++)
+            sum += satisfaction[i];
+
+        int prevLikeCoefficient = 0;
+
+        for (int i = 0; i < length; i++) {
+            suffixSum[i] = sum;
+            sum -= satisfaction[i];
+            prevLikeCoefficient += satisfaction[i] * (i + 1);
+        }
+
+        int maxLikeCoefficient = Math.max(0,prevLikeCoefficient);
+
+        for (int i = 1; i < length; i++) {
+            int curLikeCoefficient = prevLikeCoefficient - suffixSum[i - 1];
+            maxLikeCoefficient = Math.max(maxLikeCoefficient,
+                    curLikeCoefficient);
+
+            prevLikeCoefficient = curLikeCoefficient;
+        }
+
+        return maxLikeCoefficient;
+
     }
 }
