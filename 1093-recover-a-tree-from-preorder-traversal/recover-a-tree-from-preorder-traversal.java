@@ -24,6 +24,7 @@ class Solution {
             for (val = 0; i < S.length() && S.charAt(i) != '-'; i++) {
                 val = val * 10 + (S.charAt(i) - '0');
             }
+            // level is one less than height
             while (stack.size() > level) {
                 stack.pop();
             }
