@@ -9,7 +9,6 @@ class Solution {
             dp.put(nums[i],dp.getOrDefault(nums[i]-1,0)+1);
             maxi = Math.max(maxi,Math.max(dp.get(nums[i]),dp.get(nums[i]+1)));
         }
-        System.out.println(dp);
         return maxi;
     }
 }
