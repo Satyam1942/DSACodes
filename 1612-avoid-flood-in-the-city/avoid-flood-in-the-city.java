@@ -1,35 +1,39 @@
 class Solution {
     public int[] avoidFlood(int[] rains) {
-        int length = rains.length;
-        int ans[] = new int[length];
 
-        TreeSet<Integer> zeroPtr = new TreeSet<>();
-        HashMap<Integer, Integer> cache = new HashMap<>();
+        int noOfLakes = rains.length;
+        int ans[] = new int[noOfLakes];
 
-        for (int idx = 0; idx < length; idx++) {
-            if (rains[idx] > 0) {
-                if (cache.containsKey(rains[idx])) {
-                    int prevIndex = cache.get(rains[idx]);
-                    Integer key = zeroPtr.ceiling(prevIndex);
-                    if (key == null)
+        HashMap<Integer,Integer> map = new HashMap<>();
+        TreeSet<Integer> set = new TreeSet<>();
+        int anyLake = 0;
+
+        for(int i =0;i<noOfLakes;i++){
+
+            if(rains[i]==0)
+                set.add(i);
+            else{
+                ans[i] = -1;
+                anyLake = rains[i];
+
+                if(map.containsKey(rains[i])){
+                    if(!set.isEmpty() && set.ceiling(map.get(rains[i]))!=null){
+                        ans[set.ceiling(map.get(rains[i]))] = rains[i];
+                        set.remove(set.ceiling(map.get(rains[i])));
+                    }else
                         return new int[0];
-                    else {
-                        ans[key] = rains[idx];
-                        zeroPtr.remove(key);
-                    }
                 }
 
-                cache.put(rains[idx], idx);
-                ans[idx] = -1;
-            } else
-                zeroPtr.add(idx);
+                map.put(rains[i],i);
+            }
         }
 
-        for (Integer idx : zeroPtr) {
-            ans[idx] = 1;
+        for(int i=0;i<noOfLakes;i++){
+            if(ans[i]==0){
+                ans[i] = anyLake;
+            }
         }
 
-        return ans;
-
+        return ans; 
     }
 }
