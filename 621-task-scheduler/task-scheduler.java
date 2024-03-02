@@ -1,38 +1,73 @@
-class Pair
-{
-    int time,freq;
-    Pair(int time, int freq)
-    {
+class Triplet {
+    char task;
+    int count;
+    int time;
+
+    Triplet(char task, int time, int count) {
+        this.task = task;
         this.time = time;
-        this.freq = freq;
-    } 
+        this.count = count;
+    }
 }
 
+class Pair {
+    char task;
+    int count;
+
+    Pair(char task, int count) {
+        this.task = task;
+        this.count = count;
+    }
+}
+
+class CustomComparator implements Comparator<Pair> {
+    public int compare(Pair a, Pair b) {
+        return b.count - a.count;
+    }
+}
 
 class Solution {
     public int leastInterval(char[] tasks, int n) {
-        Queue<Pair> q = new LinkedList<>();
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
-        int time = 0;
 
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new CustomComparator());
+        Queue<Triplet> q = new LinkedList<>();
         int freq[] = new int[26];
-        for(int i=0;i<tasks.length;i++)  freq[tasks[i]-65]++;
-        for(int i=0;i<26;i++) if(freq[i]>0) pq.add(freq[i]);
 
-        while(!q.isEmpty() || !pq.isEmpty())
-        {
-            time++;
-            
-            int curFreq = 0;
-            if(!pq.isEmpty()) curFreq = pq.poll();
-            while(!q.isEmpty() && q.peek().time<=time) pq.add(q.poll().freq);
-            
-          
-          if(curFreq>1)q.add(new Pair(n+time,curFreq-1)); 
-            
+        for (int i = 0; i < tasks.length; i++) {
+            char curTask = tasks[i];
+            freq[(int) curTask - 65]++;
         }
 
-        return time;
+        for (int i = 0; i < 26; i++) {
+            if (freq[i] == 0)
+                continue;
 
+            char curTask = (char) (i + 65);
+            pq.add(new Pair(curTask, freq[i]));
+        }
+        
+        int time = 1;
+        while (!q.isEmpty() || !pq.isEmpty()) {
+
+            while (!q.isEmpty() && q.peek().time <= time) {
+                char task = q.peek().task;
+                int count = q.peek().count;
+                q.poll();
+                pq.add(new Pair(task, count));
+            }
+
+            if (!pq.isEmpty()) {
+                char task = pq.peek().task;
+                int curFreq = pq.peek().count;
+                pq.poll();
+
+                if (curFreq != 1)
+                    q.add(new Triplet(task,time+n+1, curFreq - 1));
+            }
+
+            time++;
+        }
+
+        return time-1;
     }
 }
