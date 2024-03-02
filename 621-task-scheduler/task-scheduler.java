@@ -46,7 +46,7 @@ class Solution {
             pq.add(new Pair(curTask, freq[i]));
         }
         
-        int time = 1;
+        int time = 0;
         while (!q.isEmpty() || !pq.isEmpty()) {
 
             while (!q.isEmpty() && q.peek().time <= time) {
@@ -68,6 +68,6 @@ class Solution {
             time++;
         }
 
-        return time-1;
+        return time;
     }
 }
