@@ -1,62 +1,99 @@
-class Solution {
-    public int greaterCount(List<Integer> arr, int n){
-        return arr.size()-(binarySearch(arr, n) + 1);
+class FenwickTree{
+    int size;
+    int tree[];
+    int totalElements;
+
+    FenwickTree(int n){
+        size = n;
+        tree = new int[n+1];
+        totalElements = 0;
     }
 
-    private int binarySearch(List<Integer> arr, int target) {
-        int low = 0, high = arr.size() - 1;
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (arr.get(mid) <= target) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
+    public void add(int index, int delta){
+        while(index<=size){
+            tree[index]+=delta;
+            index += (index&(-index));
         }
-        return low;
+        totalElements++;
+    } 
+
+    public int greaterCount(int index){
+        int floorCount = 0;
+        while(index>0){
+            floorCount+=tree[index];
+            index -= (index&(-index));
+        }
+        return totalElements-floorCount;
     }
 
-    private void addToSortedArray(List<Integer> arr, int target){
-        int index = binarySearch(arr, target);
-        arr.add(index, target);
+    public void update(int nums,HashMap<Integer,Integer> mapNumberToIndex){
+        add(mapNumberToIndex.get(nums),1);
+    }
+}
+
+class Solution {
+
+    void compressNumbers(int[] nums, HashMap<Integer,Integer> mapNumberToIndex){
+        TreeSet<Integer> set = new TreeSet<>();
+        for(int i=0;i<nums.length;i++)
+            set.add(nums[i]);
+
+        int index = 1;
+        for(int i:set){
+            mapNumberToIndex.put(i,index);
+            index++;
+        }
     }
 
     public int[] resultArray(int[] nums) {
-        int[] arr1 = new int[nums.length];
-        int[] arr2 = new int[nums.length];
+        HashMap<Integer,Integer> mapNumberToIndex = new HashMap<>();
+        compressNumbers(nums,mapNumberToIndex);
+        int numberOfUniqueNumbers = mapNumberToIndex.size(); 
 
-        int arr1Counter = 0;
-        int arr2Counter = 0;
+        FenwickTree ft1 = new FenwickTree(numberOfUniqueNumbers);
+        FenwickTree ft2 = new FenwickTree(numberOfUniqueNumbers);
 
-        List<Integer> sortedArr1 = new ArrayList<>();
-        List<Integer> sortedArr2 = new ArrayList<>();
+        List<Integer> arr1 = new ArrayList<>();
+        List<Integer> arr2 = new ArrayList<>();
 
-        for(int i=0; i<nums.length; i++){
-            boolean cond1 = greaterCount(sortedArr1, nums[i]) > greaterCount(sortedArr2, nums[i]);
-            boolean cond2 = greaterCount(sortedArr1, nums[i]) < greaterCount(sortedArr2, nums[i]);
-            boolean cond3 = greaterCount(sortedArr1, nums[i]) == greaterCount(sortedArr2, nums[i]);
-            if(i!=1 && (i==0 || cond1 || (cond3 && arr1Counter<=arr2Counter))) {
-                arr1[arr1Counter] = nums[i];
-                arr1Counter++;
-                addToSortedArray(sortedArr1, nums[i]);
+        arr1.add(nums[0]); 
+        ft1.update(nums[0],mapNumberToIndex);
+    
+        arr2.add(nums[1]);
+        ft2.update(nums[1],mapNumberToIndex);
+
+        for(int i=2;i<nums.length;i++){
+
+            int indexOfNum = mapNumberToIndex.get(nums[i]);
+            int greaterCount1 = ft1.greaterCount(indexOfNum);
+            int greaterCount2 = ft2.greaterCount(indexOfNum);
+
+            if(greaterCount1>greaterCount2){
+                arr1.add(nums[i]);
+                ft1.update(nums[i],mapNumberToIndex);
+            }else if(greaterCount1<greaterCount2){
+                arr2.add(nums[i]);
+                ft2.update(nums[i],mapNumberToIndex);
+            }else{
+                if(arr1.size()<=arr2.size()){
+                    arr1.add(nums[i]);
+                    ft1.update(nums[i],mapNumberToIndex);
+                }else{
+                    arr2.add(nums[i]);
+                    ft2.update(nums[i],mapNumberToIndex);
+                }
             }
-            else if(i==1 || cond2 || cond3){
-                arr2[arr2Counter] = nums[i];
-                arr2Counter++;
-                addToSortedArray(sortedArr2, nums[i]);
-            }
+       
         }
+      
+        int res[] = new int[nums.length];
+        int pointer = 0;
+        for(int i:arr1)
+            res[pointer++] = i;
 
-        int[] finalArr = new int[nums.length];
-        int finalIndex = 0;
-        for(int i=0; i<arr1Counter; i++){
-            finalArr[finalIndex] = arr1[i];
-            finalIndex++;
-        }
-        for(int i=0; i<arr2Counter; i++){
-            finalArr[finalIndex] = arr2[i];
-            finalIndex++;
-        }
-        return finalArr;
+        for(int i:arr2)
+            res[pointer++] = i;
+
+        return res;
     }
 }
