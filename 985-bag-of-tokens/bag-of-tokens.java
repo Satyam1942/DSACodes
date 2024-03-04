@@ -1,6 +1,7 @@
 class Solution {
     public int bagOfTokensScore(int[] tokens, int power) {
         int noOfTokens = tokens.length;
+        //Important missed edge case
         if(noOfTokens==0)
             return 0;
         Arrays.sort(tokens);
@@ -30,7 +31,7 @@ class Solution {
                 power += tokens[rightPointer];
                 rightPointer--;
             }
-           
+            maxScore = Math.max(maxScore, score);
         }
 
         if (leftPointer == rightPointer && power >= tokens[leftPointer])
