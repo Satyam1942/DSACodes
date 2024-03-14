@@ -33,6 +33,5 @@ class Solution {
        }
 
       return noOfSubarraysGreaterThan(nums,target-1)-noOfSubarraysGreaterThan(nums,target);
-
     }
 }
