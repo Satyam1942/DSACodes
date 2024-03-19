@@ -1,51 +1,53 @@
 class Solution {
-    int getSum(int [] nums)
-    {
-        int sum =0;
-        for(int i=0;i<nums.length;i++)
-        {
-            sum+=nums[i];
+    int getSum(int arr[] ,int length){
+        int sum = 0;
+        for(int i=0;i<length;i++){
+            sum+=arr[i];
         }
         return sum;
     }
-    int getMinimumElement(int nums[])
-    {
-         int mini = Integer.MAX_VALUE;
-        for(int i=0;i<nums.length;i++)
-        {
-            mini = Math.min(mini,nums[i]);
-        }
-        return mini;
-    }
 
     public int minOperations(int[] nums, int x) {
-        int sumOfArray = getSum(nums);
-        int minElement = getMinimumElement(nums);
-        if(x>sumOfArray || x<minElement) return -1;
-
-        int left =0, right = 0;
         int length = nums.length;
-        int subArraySum = sumOfArray-x;
-        int maxLength = 0 , tempSubarraySum =0;
+        int totalSum = getSum(nums,length);
+        
+        if(x>totalSum)
+            return -1;
+        if(x==totalSum)
+            return length;
 
-        while(right<=length)
-        {
-            if(tempSubarraySum > subArraySum )
-            {
-                 tempSubarraySum-=nums[left];
-                 left++;
-                 continue;
+        int i=0,j=0;
+        int expectedSum = totalSum-x;
+        int runningSum = 0;
+        int maximumSubarrayLength = 0;
+
+        while(i<=j && j<=length){
+            if(runningSum>expectedSum){
+                runningSum-=nums[i];
+                i++;
+                continue;
+            }else if(runningSum==expectedSum){
+                maximumSubarrayLength = Math.max(maximumSubarrayLength,j-i);
             }
 
-            if(tempSubarraySum == subArraySum)
-            {
-                maxLength = Math.max(maxLength,right-left);
-            }
-
-            if(right<length) tempSubarraySum+=nums[right];
-            right++;
+            if(j<length)
+                runningSum+=nums[j];
+            j++;
         }
 
-        return length-maxLength;
+        if(maximumSubarrayLength==0)
+            return -1;
+
+        return length-maximumSubarrayLength;
     }
 }
+
+/*
+    sum = 11
+    find longest subarray with sum = sum-x = 11-5 = 6
+    1,1,4,2,3
+          i   j 
+    runningSum = 6
+    length = 3
+    ans = 5-3 =2
+ */
