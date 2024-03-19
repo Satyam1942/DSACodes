@@ -49,7 +49,7 @@ class Solution {
         int time = 0;
         while (!q.isEmpty() || !pq.isEmpty()) {
 
-            while (!q.isEmpty() && q.peek().time <= time) {
+            while (!q.isEmpty() && q.peek().time < time) {
                 char task = q.peek().task;
                 int count = q.peek().count;
                 q.poll();
@@ -62,7 +62,7 @@ class Solution {
                 pq.poll();
 
                 if (curFreq != 1)
-                    q.add(new Triplet(task,time+n+1, curFreq - 1));
+                    q.add(new Triplet(task,time+n, curFreq - 1));
             }
 
             time++;
