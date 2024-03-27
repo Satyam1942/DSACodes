@@ -10,11 +10,10 @@ class Solution {
                 left++;
                 continue;
             }   
-            else 
-                count+=(right-left);
 
             if(right<len)
                 product*=nums[right];
+            count+=(right-left);
             right++;
         }
 
