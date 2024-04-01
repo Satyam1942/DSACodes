@@ -1,18 +1,34 @@
 class Solution {
-        public long countSubarrays(int[] A, int minK, int maxK) {
-        long res = 0, jbad = -1, jmin = -1, jmax = -1, n = A.length;
-        for (int i = 0; i < n; ++i) {
-            if (A[i] < minK || A[i] > maxK) jbad = i;
-            if (A[i] == minK) jmin = i;
-            if (A[i] == maxK) jmax = i;
-            res += Math.max(0L, Math.min(jmin, jmax) - jbad);
+    public long countSubarrays(int[] nums, int minK, int maxK) {
+        long noOfSubarrays = 0l;
+        int lastInvalidIndex =-1;
+        int lastMinKIndex = -1;
+        int lastMaxKIndex = -1;
+
+        int lengthOfArray = nums.length;
+        for(int i=0;i<lengthOfArray;i++){
+            if(nums[i]<minK || nums[i]>maxK){
+                lastInvalidIndex = i;
+                lastMinKIndex = -1;
+                lastMaxKIndex = -1;
+            }
+            if(nums[i]==minK)
+                lastMinKIndex = i;
+            if(nums[i]==maxK)
+                lastMaxKIndex = i;
+            noOfSubarrays += Math.max(0l,Math.min(lastMinKIndex,lastMaxKIndex)-lastInvalidIndex);
         }
-        return res;
+
+        return noOfSubarrays;
     }
 }
-/*
-    1,3,5,2,7,5
 
-    max of prev and min of next
-    freqofminK*freqofmaxK
- */
+/*
+   1. divide array into subarrays containing minK and maxK
+   2. calculate ans for each subarray
+
+   2nd approach no extra space required
+   1. use 3 pointers ; badIndex , minIndex, maxIndex 
+   2. if(number is not in range) set bad index and reset min and max Index
+   3. rest calculation is same as the above approach
+*/
