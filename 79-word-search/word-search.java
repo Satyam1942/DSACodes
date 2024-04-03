@@ -45,3 +45,15 @@ class Solution {
         return false;
     }
 }
+
+/*
+    FOLLOW UP VIA PRUNING SEARCH!! (REMOVING unnessary things!!)
+
+    1.count frequency of all characters in string as well as board. If any character is mismatching
+    or any character is not present , we can simply return false
+
+    2. If first letters are present more in board than last letter we will search from end of thw word
+    instead of starting
+
+    This makes time complexity same but removes many irrelevant cases!!
+ */
