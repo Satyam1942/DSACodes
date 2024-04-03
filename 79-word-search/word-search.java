@@ -37,7 +37,8 @@ class Solution {
                 if(word.charAt(0)==board[i][j])
                 {
                     boolean res = dfs(vis,board,i,j,m,n,word,0);
-                    if(res) return true;
+                    if(res) 
+                        return true;
                 }
             }
         }
