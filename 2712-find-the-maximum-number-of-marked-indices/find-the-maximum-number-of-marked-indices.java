@@ -1,29 +1,33 @@
 class Solution {
-    boolean isPossibleToMatchK(int nums[] , int k){
-        int length = nums.length;
+    boolean isPossibleToMarkKIndices(int [] nums, int k){
 
+        int length = nums.length;
         for(int i=0;i<k;i++){
-            if(2*nums[i]>nums[length-(k-i)])
+            if(2*nums[i]>nums[length-k+i])
                 return false;
         }
         return true;
     }
 
     public int maxNumOfMarkedIndices(int[] nums) {
+        int length = nums.length;
         Arrays.sort(nums);
-
-        int left = 0;
-        int right = nums.length/2;
-        int k = 0;
+        int left = 0 ;
+        int right = length/2;
+        int maxMarkedIndices = 0;
         while(left<=right){
-            int mid  = (left+right)/2;
-            if(isPossibleToMatchK(nums,mid)){
-                k = mid;
-                left  = mid+1;
-            }else
+            int mid = (left+right)/2;
+            if(isPossibleToMarkKIndices(nums,mid)){
+                left = mid+1;
+                maxMarkedIndices = mid;
+            }else{
                 right = mid-1;
+            }
         }
-
-        return 2*k;
+        return maxMarkedIndices*2;
     }
 }
+
+/*
+    2,3,4,5
+ */
