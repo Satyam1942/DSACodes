@@ -1,30 +1,26 @@
 class Solution {
-    int largestRectangleInHistogram(int arr[])
-    {
+    int largestRectangleInHistogram(int arr[]) {
         Stack<Integer> st = new Stack<>();
-        int prevSmaller = -1, nextSmaller = arr.length;
-        int maxmArea = 0;
-        for(int i=0;i<arr.length;i++)
-        {
-            while(!st.isEmpty() && arr[st.peek()]>arr[i])
-            {
+        int length = arr.length;
+        int maxArea = 0;
+        for(int i=0;i<length;i++){
+            while(!st.isEmpty() && arr[st.peek()]>=arr[i]){
                 int height = arr[st.pop()];
-                prevSmaller = (!st.isEmpty())? st.peek():-1;
-                nextSmaller = i;
-                maxmArea = Math.max(maxmArea,(nextSmaller-prevSmaller-1)*height);
+                int width = (st.isEmpty())?i:i-st.peek()-1;
+                int curArea = height*width;
+                maxArea = Math.max(maxArea,curArea);
             }
             st.push(i);
         }
-     
-        nextSmaller = arr.length;
-        while(!st.isEmpty())
-        {
-            int height = arr[st.pop()];
-            prevSmaller = (!st.isEmpty())? st.peek():-1;
-            maxmArea = Math.max(maxmArea,(nextSmaller-prevSmaller-1)*height);
-        }
 
-        return maxmArea;
+        while(!st.isEmpty()){
+            int height = arr[st.pop()];
+            int width = (st.isEmpty())?length:length-1-st.peek();
+            int curArea = height*width;
+            maxArea = Math.max(maxArea,curArea);
+        }
+        
+        return maxArea;
     }
 
     public int maximalRectangle(char[][] matrix) 
@@ -38,8 +34,10 @@ class Solution {
         {
             for(int j=0;j<n;j++)
             {
-                if(matrix[i][j]=='0')dp[j]=0;
-                else dp[j]+=1;
+                if(matrix[i][j]=='0')
+                    dp[j]=0;
+                else 
+                    dp[j]+=1;
             }
             
             int maxmArea = largestRectangleInHistogram(dp);
