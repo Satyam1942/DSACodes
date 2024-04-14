@@ -18,12 +18,13 @@ class Solution {
         if(root==null)
             return 0;
         int sum = 0;
-        sum += depthFirstSearch(root.left,root);
-        sum += depthFirstSearch(root.right,root);
-
         if(root.left==null && root.right==null && parent!=null && parent.left ==root)
             sum+=root.val;
-
+        else {
+            sum += depthFirstSearch(root.left,root);
+            sum += depthFirstSearch(root.right,root);
+        }
+    
         return sum;
     }
     public int sumOfLeftLeaves(TreeNode root) {
