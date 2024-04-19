@@ -1,7 +1,7 @@
 class DisjointSet {
     List<Integer> parent;
     List<Integer> size;
-
+  
     DisjointSet(int numberOfNodes) {
         parent = new ArrayList<>();
         size = new ArrayList<>();
@@ -20,19 +20,20 @@ class DisjointSet {
         return ultimateParent;
     }
 
-    void unionBySize(int u, int v) {
+    void  unionBySize(int u, int v) {
         int ultimateParentU = findUltimateParent(u);
         int ultimateParentV = findUltimateParent(v);
 
         if (ultimateParentU == ultimateParentV)
-            return;
+            return; 
 
         if (size.get(ultimateParentU) > size.get(ultimateParentV)) {
             parent.set(ultimateParentV, ultimateParentU);
-            size.set(ultimateParentU, ultimateParentU + ultimateParentV);
+            size.set(ultimateParentU, size.get(ultimateParentU) + size.get(ultimateParentV));
+            
         } else {
             parent.set(ultimateParentU, ultimateParentV);
-            size.set(ultimateParentV, ultimateParentU + ultimateParentV);
+            size.set(ultimateParentV, size.get(ultimateParentU) + size.get(ultimateParentV));
         }
     }
 }
@@ -50,6 +51,14 @@ class Solution {
         int delRow[] = { 0, -1, 0, 1 };
         int delCol[] = { 1, 0, -1, 0 };
 
+        int count=0;
+        for(int i=0;i<length;i++){
+            for(int j=0;j<width;j++){
+                if(grid[i][j]=='1')
+                    count++;
+            }
+        }
+
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
 
@@ -57,7 +66,6 @@ class Solution {
                     continue;
 
                 int curNode = i * width + j;
-                int ultimateParentU = ds.parent.get(curNode);
 
                 for (int k = 0; k < 4; k++) {
                     int newRow = i + delRow[k];
@@ -66,27 +74,19 @@ class Solution {
                    
                     if (isValid) {
                         int newNode = newRow * width + newCol;
-                        int ultimateParentV = ds.parent.get(newNode);
+                        int ultimateParentV = ds.findUltimateParent(newNode);
+                        int ultimateParentU = ds.findUltimateParent(curNode);
+                        
                         if (ultimateParentU != ultimateParentV) {
-                           
                             ds.unionBySize(curNode, newNode);
+                            count--;
                         }
                     }
                 }
             }
         }
 
-        HashSet<Integer> noOfParents = new HashSet<>();
-        for (int i = 0; i < length; i++) {
-            for(int j=0;j<width;j++){
-                if(grid[i][j]=='0')
-                    continue;
-                int nodeNumber = i*width + j;
-                noOfParents.add(ds.findUltimateParent(nodeNumber));
-            }
-        }
-        
-        int numberOfIslands = noOfParents.size();
+        int numberOfIslands = count;
 
         return numberOfIslands;
     }
