@@ -39,8 +39,8 @@ class Solution {
             lcm.add(l * (Integer.bitCount(i) % 2 == 1 ? 1 : -1));
         }
 
-        long lowerBound  = 1;
-        long upperBound =  Long.MAX_VALUE;
+        long lowerBound  = coins[0];
+        long upperBound =  (long)k*(long)coins[0];
         long ans = upperBound;
         while(lowerBound<=upperBound){
             long mid = lowerBound+(upperBound-lowerBound)/2l;
