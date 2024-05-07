@@ -9,13 +9,17 @@
  * }
  */
 class Solution {
-    public ListNode doubleIt(ListNode head) {
-        Stack<ListNode> st = new Stack<>();
+    void pushIntoStack(Stack<ListNode> st, ListNode head){
         ListNode temp = head;
         while(temp!=null){
             st.push(temp);
             temp = temp.next;
         }
+    }
+
+    public ListNode doubleIt(ListNode head) {
+        Stack<ListNode> st = new Stack<>();
+        pushIntoStack(st,head);
 
         int carry = 0;
         while(!st.isEmpty()){
@@ -24,7 +28,7 @@ class Solution {
             carry = (node.val*2 + carry)/10;
             node.val = newVal;
         }
-
+        
         if(carry==1){
             ListNode newHead = new ListNode(1);
             newHead.next = head;
