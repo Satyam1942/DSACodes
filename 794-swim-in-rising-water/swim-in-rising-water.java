@@ -1,6 +1,5 @@
 class Pair {
     int row, col;
-
     Pair(int row, int col) {
         this.row = row;
         this.col = col;
