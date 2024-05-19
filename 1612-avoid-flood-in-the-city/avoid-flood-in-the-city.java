@@ -3,32 +3,27 @@ class Solution {
         int noOfLakes = rains.length;
         int pumpLake[] = new int[noOfLakes];
         TreeSet<Integer> zeroIndex = new TreeSet<>();
-        HashMap<Integer,Queue<Integer>> map = new HashMap<>();
+        HashMap<Integer,Integer> map = new HashMap<>();
 
         for(int i=0;i<noOfLakes;i++){
             int waterLevel = rains[i];
             if(waterLevel==0){
                 zeroIndex.add(i);
             }else{
-                if(!map.containsKey(waterLevel))
-                    map.put(waterLevel, new LinkedList<>());
-                else{
-                    int prevIndex = map.get(waterLevel).peek();
+                if(map.containsKey(waterLevel)){
+                    int prevIndex = map.get(waterLevel);
                     Integer index = zeroIndex.ceiling(prevIndex);
                     if(index!=null){
                         pumpLake[index] = waterLevel;
                         zeroIndex.remove(index);
-                        map.get(waterLevel).poll();
-                    }
+                        map.remove(waterLevel);
+                    }else
+                        return new int[0];
                 }
-                map.get(waterLevel).add(i);
+
+                map.put(waterLevel,i);
                 pumpLake[i] = -1;
             }
-        }
-
-        for(Map.Entry<Integer,Queue<Integer>> i: map.entrySet()){
-            if(i.getValue().size()>1)
-                return new int[0];
         }
 
         for(int ind: zeroIndex)
