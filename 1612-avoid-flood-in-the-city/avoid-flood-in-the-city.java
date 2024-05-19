@@ -1,39 +1,45 @@
 class Solution {
     public int[] avoidFlood(int[] rains) {
-
         int noOfLakes = rains.length;
-        int ans[] = new int[noOfLakes];
-
-        HashMap<Integer,Integer> map = new HashMap<>();
-        TreeSet<Integer> set = new TreeSet<>();
-        int anyLake = 0;
-
-        for(int i =0;i<noOfLakes;i++){
-
-            if(rains[i]==0)
-                set.add(i);
-            else{
-                ans[i] = -1;
-                anyLake = rains[i];
-
-                if(map.containsKey(rains[i])){
-                    if(!set.isEmpty() && set.ceiling(map.get(rains[i]))!=null){
-                        ans[set.ceiling(map.get(rains[i]))] = rains[i];
-                        set.remove(set.ceiling(map.get(rains[i])));
-                    }else
-                        return new int[0];
-                }
-
-                map.put(rains[i],i);
-            }
-        }
+        int pumpLake[] = new int[noOfLakes];
+        TreeSet<Integer> zeroIndex = new TreeSet<>();
+        HashMap<Integer,Queue<Integer>> map = new HashMap<>();
 
         for(int i=0;i<noOfLakes;i++){
-            if(ans[i]==0){
-                ans[i] = anyLake;
+            int waterLevel = rains[i];
+            if(waterLevel==0){
+                zeroIndex.add(i);
+            }else{
+                if(!map.containsKey(waterLevel))
+                    map.put(waterLevel, new LinkedList<>());
+                else{
+                    int prevIndex = map.get(waterLevel).peek();
+                    Integer index = zeroIndex.ceiling(prevIndex);
+                    if(index!=null){
+                        pumpLake[index] = waterLevel;
+                        zeroIndex.remove(index);
+                        map.get(waterLevel).poll();
+                    }
+                }
+                map.get(waterLevel).add(i);
+                pumpLake[i] = -1;
             }
         }
 
-        return ans; 
+        for(Map.Entry<Integer,Queue<Integer>> i: map.entrySet()){
+            if(i.getValue().size()>1)
+                return new int[0];
+        }
+
+        for(int ind: zeroIndex)
+            pumpLake[ind] = 1;
+
+        return pumpLake;
     }
 }
+
+/*
+    I want to find  value that will come in future first and that has come in past
+    1       
+    2
+*/ 
