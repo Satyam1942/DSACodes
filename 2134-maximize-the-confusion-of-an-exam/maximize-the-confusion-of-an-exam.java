@@ -28,7 +28,6 @@ class Solution {
     boolean isPossible(int maxChanges, int maxLength, String answerKey){
         int noOfChangesTrue = noOfChangesRequired(answerKey,maxLength,'F');
         int noOfChangesFalse = noOfChangesRequired(answerKey,maxLength,'T');
-
         return maxChanges>=Math.min(noOfChangesTrue,noOfChangesFalse);
     }
 
@@ -45,7 +44,6 @@ class Solution {
             }else
                 right = mid-1;
        }
-
        return ans;
     }
 }
