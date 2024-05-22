@@ -49,13 +49,6 @@ class Solution {
             }
         }
         
-        // for(int i=0;i<length;i++){
-        //     for(int j=0;j<length;j++){
-        //         System.out.print(palindromeCache[i][j]+" ");
-        //     }
-        //     System.out.println();
-        // }
-
         Integer cache[] = new Integer[length];
         return minimumCuts(0,s,palindromeCache,cache);
     }
