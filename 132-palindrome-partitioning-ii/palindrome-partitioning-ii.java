@@ -1,31 +1,62 @@
 class Solution {
-  int rec(String s, int i, Integer dp[])
-    {
-        if(i>=s.length()-1) return 0;
-        if(dp[i]!=null) return  dp[i];
+    int minimumCuts(int index, String s, boolean palindromeCache[][], Integer cache[]){
+        if(index>=s.length()-1)
+            return 0;
+        if(cache[index]!=null)
+            return cache[index];
 
-        int mini = Integer.MAX_VALUE;
-
-        String x = "", xRev = "";
-        
-        for(int k = i;k<s.length();k++)
-        {
-             x += s.charAt(k);
-             xRev = s.charAt(k)+xRev;
-            if(x.equals(xRev))
-            {
-                int temp  = 0;
-                if(k==s.length()-1) temp = rec(s,k+1,dp);
-                else temp = 1+rec(s,k+1,dp);
-                mini = Math.min(temp,mini);
+        int minCuts = Integer.MAX_VALUE;
+        for(int k=index;k<s.length();k++){
+            if(palindromeCache[index][k]){
+                int temp = minimumCuts(k+1,s,palindromeCache,cache);
+                if(k!=s.length()-1)
+                    temp+=1;
+                minCuts = Math.min(minCuts,temp);
             }
         }
-
-        return dp[i] =  mini;
+        return cache[index] = minCuts;
     }
-    
+
     public int minCut(String s) {
-         Integer dp[] = new Integer[s.length()+1];
-         return rec(s,0,dp);
+        int length = s.length();
+        boolean palindromeCache[][] = new boolean[length][length];
+    
+        for(int center = 0; center<s.length();center++){
+            int leftOdd = center;
+            int rightOdd = center;
+            while(leftOdd>=0 && rightOdd<length){
+                if(s.charAt(leftOdd)==s.charAt(rightOdd))
+                    palindromeCache[leftOdd][rightOdd] = true;
+                else{
+                    palindromeCache[leftOdd][rightOdd] = false;
+                    break;
+                }
+                leftOdd--;
+                rightOdd++;
+            }
+
+            int leftEven  = center;
+            int rightEven = center+1;
+            while(leftEven>=0 && rightEven<length){
+                if(s.charAt(leftEven)==s.charAt(rightEven))
+                    palindromeCache[leftEven][rightEven] = true;
+                else{
+                    palindromeCache[leftEven][rightEven] = false;
+                    break;
+                }
+                leftEven--;
+                rightEven++;
+            }
+        }
+        
+        // for(int i=0;i<length;i++){
+        //     for(int j=0;j<length;j++){
+        //         System.out.print(palindromeCache[i][j]+" ");
+        //     }
+        //     System.out.println();
+        // }
+
+        Integer cache[] = new Integer[length];
+        return minimumCuts(0,s,palindromeCache,cache);
     }
 }
