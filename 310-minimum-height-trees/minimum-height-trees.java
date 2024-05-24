@@ -1,46 +1,56 @@
 class Solution {
-    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-    if (n == 1) {
-        return Arrays.asList(0);
-    }
-    
-    List<List<Integer>> adj = new ArrayList<>();
-    int[] inlinks = new int[n];
-    createGraph(n, edges, adj, inlinks);
-     
-    List<Integer> leaves = new LinkedList<>();
-    for(int i = 0; i < inlinks.length; i++) {
-        if (inlinks[i] == 1) {
-            leaves.add(i);
+    void buildTree(List<List<Integer>> adjList, int [][] edges, int n){
+        for(int i=0;i<n;i++)
+            adjList.add(new ArrayList<>());
+        for(int i=0;i<edges.length;i++){
+            adjList.get(edges[i][0]).add(edges[i][1]);
+            adjList.get(edges[i][1]).add(edges[i][0]);
         }
     }
-    
-    while (n > 2) {
-        List<Integer> newLeaves = new ArrayList<>();
-        for (int leave : leaves) {
-            for (int nb : adj.get(leave)) {
-                inlinks[nb]--;
-                if (inlinks[nb] == 1) {
-                    newLeaves.add(nb);
+
+    void calculateDegree(int [][] edges, int degree[]){
+        for(int i=0;i<edges.length;i++){
+            degree[edges[i][0]]++;
+            degree[edges[i][1]]++;
+        }
+    }
+
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        List<List<Integer>> adjList = new ArrayList<>();
+        int degree[] = new int[n];
+        buildTree(adjList,edges,n);
+        calculateDegree(edges,degree);
+        
+        Queue<Integer> q = new LinkedList<>();
+        for(int i=0;i<n;i++){
+            if(degree[i]==1)
+                q.add(i);
+        }
+
+        
+        while(n>2){
+            int size = q.size();
+            while(size-->0){
+                int curNode = q.poll();
+                for(int i=0;i<adjList.get(curNode).size();i++){
+                    int adjNode = adjList.get(curNode).get(i);
+                    degree[adjNode]--;
+                    if(degree[adjNode]==1){
+                        q.add(adjNode);
+                    }
                 }
+                n--;
             }
         }
-        n -= leaves.size();
-        leaves = newLeaves;
-    }
-    
-    return leaves;
-}
 
-public void createGraph(int n, int[][] edges, List<List<Integer>> adj, int[] inlinks) {
-    for (int i = 0; i < n; i++) {
-        adj.add(new ArrayList<Integer>());
+        List<Integer> mhtRoot= new ArrayList<>();
+        if(q.isEmpty()){
+            mhtRoot.add(0);
+        }
+
+        while(!q.isEmpty())
+            mhtRoot.add(q.poll());
+
+        return mhtRoot;
     }
-    for (int[] e : edges) {
-        adj.get(e[0]).add(e[1]);
-        adj.get(e[1]).add(e[0]);
-        inlinks[e[0]]++;
-        inlinks[e[1]]++;
-    }
-}
 }
