@@ -1,52 +1,57 @@
 class Solution {
-    int largestRectangleInHistogram(int arr[])
-    {
+    int largestRectangleInHistogram(int rectangle[]){
+        int length = rectangle.length;
         Stack<Integer> st = new Stack<>();
-        int prevSmaller = -1, nextSmaller = arr.length;
-        int maxmArea = 0;
-        for(int i=0;i<arr.length;i++)
-        {
-            while(!st.isEmpty() && arr[st.peek()]>arr[i])
-            {
-                int height = arr[st.pop()];
-                prevSmaller = (!st.isEmpty())? st.peek():-1;
-                nextSmaller = i;
-                maxmArea = Math.max(maxmArea,(nextSmaller-prevSmaller-1)*height);
+        int maxArea = 0;
+        for(int i=0;i<length;i++){
+            while(!st.isEmpty() && rectangle[st.peek()]>rectangle[i]){
+                int height = rectangle[st.pop()];
+                int prev = (st.isEmpty())?-1:st.peek();
+                int width  = i-prev-1;
+                int area= height*width;
+                maxArea=  Math.max(maxArea,area);
             }
             st.push(i);
         }
-     
-        nextSmaller = arr.length;
-        while(!st.isEmpty())
-        {
-            int height = arr[st.pop()];
-            prevSmaller = (!st.isEmpty())? st.peek():-1;
-            maxmArea = Math.max(maxmArea,(nextSmaller-prevSmaller-1)*height);
+
+        
+        while(!st.isEmpty()){
+            int height = rectangle[st.pop()];
+            int prev = (st.isEmpty())?-1:st.peek();
+            int width  = length-prev-1;
+            int area= height*width;
+            maxArea=  Math.max(maxArea,area);
+        }
+        return maxArea;
+    }
+
+    int calculateLargestSubmatrix(int matrix[][]){
+        int length = matrix.length;
+        int width = matrix[0].length;
+
+        int maxArea = 0;
+        int cache[] = new int[width];
+        for(int i=0;i<length;i++){
+            for(int j=0;j<width;j++){
+                if(matrix[i][j]==0)
+                    cache[j] = 0;
+                else
+                    cache[j]+=1;
+            }
+
+            int sortedMatrix[] = new int[width];
+            for(int j=0;j<width;j++)
+                sortedMatrix[j] = cache[j];
+            Arrays.sort(sortedMatrix);
+            
+            int area = largestRectangleInHistogram(sortedMatrix);
+            maxArea = Math.max(maxArea,area);
         }
 
-        return maxmArea;
+        return maxArea;
     }
-    public int largestSubmatrix(int[][] matrix) {
-     int m = matrix.length;
-     int n = matrix[0].length;
-     int dp[] = new int[n];
-    
-    int ans = 0;
-     for(int i=0;i<m;i++)
-     {
-         for(int j=0;j<n;j++)
-         {
-             if(matrix[i][j]==0) dp[j] = 0;
-             else dp[j]++;
-         }
-         int sortedArray[] = new int[n];
-         for(int j=0;j<n;j++) sortedArray[j] = dp[j];
-          Arrays.sort(sortedArray);
-         
-         int maxArea = largestRectangleInHistogram(sortedArray);
-        ans = Math.max(ans,maxArea);
-     }
 
-        return ans;
+    public int largestSubmatrix(int[][] matrix) {
+        return calculateLargestSubmatrix(matrix);
     }
 }
