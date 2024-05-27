@@ -1,28 +1,22 @@
 class Solution {
-    int getCeilingCount(int x, int nums[]){
-        int length = nums.length;
-        int left = 0;
-        int right = length-1;
-        int numberOfElements = 0;
-        while(left<=right){
-            int mid = (left+right)/2;
-            if(nums[mid]>=x){
-                numberOfElements = length-mid;
-                right = mid-1;
-            }else{
-                left = mid+1;
-            }
-        }
-        return numberOfElements;
-    }
     public int specialArray(int[] nums) {
         Arrays.sort(nums);
         int length = nums.length;
-        for(int i=0;i<=nums[length-1];i++){
-            int numberOfElementsGreaterThanEqualToX = getCeilingCount(i,nums);
-            if(numberOfElementsGreaterThanEqualToX==i)
-                return i;
+        for(int i=length-1;i>0;i--){
+            int curNum = (length-i);
+            if(nums[i]==curNum && nums[i-1]!=curNum)
+                return curNum;
+            if(nums[i]>curNum && nums[i-1]<curNum)
+                return curNum;
         }
+
+        int curNum = (length);
+        if(nums[0]>=length)
+            return length;
         return -1;
     }
 }
+
+/*
+    0 2 2 3
+ */
