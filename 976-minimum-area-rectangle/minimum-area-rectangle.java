@@ -1,7 +1,6 @@
 class Solution {
     public int minAreaRect(int[][] points) {
         HashMap<Integer,HashSet<Integer>> mapX = new HashMap<>();
-        HashMap<Integer,HashSet<Integer>> mapY = new HashMap<>();
         
         int noOfPoints = points.length;
         for(int i=0;i<noOfPoints;i++){
@@ -10,9 +9,6 @@ class Solution {
             if(!mapX.containsKey(x))
                 mapX.put(x,new HashSet<>());
             mapX.get(x).add(y);
-            if(!mapY.containsKey(y))
-                mapY.put(y,new HashSet<>());
-            mapY.get(y).add(x);
         }
 
         int minArea = Integer.MAX_VALUE;
