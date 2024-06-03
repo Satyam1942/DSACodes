@@ -1,30 +1,28 @@
 class Solution {
- public int numberOfArithmeticSlices(int[] nums) {
-        HashMap<Long,Integer>[] cache = new HashMap[nums.length];
-        for(int i=0;i<nums.length;i++) cache[i] = new HashMap<>();
+    public int numberOfArithmeticSlices(int[] nums) {
+       int length = nums.length;
+       HashMap<Long,Long>[] cache = new HashMap[length];
 
-        for(int i=0;i<nums.length;i++)
-        {
-            for(int j=0;j<i;j++)
-            {
-                long dif = (long)nums[i]-(long)nums[j];
-                int freq = cache[i].getOrDefault(dif,0)+cache[j].getOrDefault(dif,0);
-                cache[i].put(dif,freq+1);
-            }
-        }       
-        int count = 0;
+       for(int i=0;i<length;i++)
+            cache[i] = new HashMap<>();
 
-        for(int i=0;i<nums.length;i++)
-        {
-            HashMap<Long,Integer> map = cache[i];
-            for(Map.Entry<Long,Integer> j:map.entrySet())
-            {
-                long dif = j.getKey();
-                int freq = j.getValue();
-                count+=freq;
+       for(int i = length-2;i>=0;i--){
+            for(int j= i+1;j<length;j++){
+                long dif = (long)nums[j]-(long)nums[i];
+                long val = (cache[j].containsKey(dif))? cache[j].get(dif): 0;
+                long curVal = (cache[i].containsKey(dif))? cache[i].get(dif): 0;
+                cache[i].put(dif,curVal+ val+1);
             }
+       }
+
+        long sum = 0;
+        for(int i=0;i<length;i++){
+            HashMap<Long,Long> temp = cache[i];
+            for(Map.Entry<Long,Long> j: temp.entrySet())
+                sum+= j.getValue();
         }
-        int n = nums.length;
-        return count-(n*(n-1))/2;
+  
+        int noOfSubsequences = (int)(sum-(length*(length-1))/2);
+        return noOfSubsequences;
     }
 }
