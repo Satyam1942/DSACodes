@@ -1,48 +1,53 @@
 class RangeModule {
-/*
-Data structure should be sorted
-Iterable DS
-if non overlapping intervals arise than I have to add it else just change the end index
-10-14 , 16-20
- */
 
-TreeMap<Integer,Integer> map;
-
+    TreeMap<Integer,Integer> map;
     public RangeModule() {
         map = new TreeMap<>();
     }
     
     public void addRange(int left, int right) {
-    
-        Integer start = map.floorKey(left);
-        Integer end = map.floorKey(right);
+        int newStart = left;
+        int newEnd = right;
+        Integer floorStart = map.floorKey(left);
+        Integer floorEnd = map.floorKey(right);
 
-        if(start!=null && map.get(start)>=left)
-        {
-            left = start;
-        }
-        if(end!=null && map.get(end)>right) right = map.get(end);
+        if(floorStart==null || map.get(floorStart)<left )
+            newStart = left;
+        else
+            newStart = floorStart;
+            
+        if(floorEnd==null || map.get(floorEnd)<=right)
+            newEnd = right;
+        else
+            newEnd = map.get(floorEnd);
         
-        map.put(left,right);
-        map.subMap(left,false,right,true).clear();
-       
+        map.subMap(newStart,newEnd).clear();
+        map.put(newStart,newEnd);
     }
     
     public boolean queryRange(int left, int right) {
-        Integer start = map.floorKey(left);
-        return start!=null && map.get(start)>=right;
+        Integer floorLeft = map.floorKey(left);
+        
+        if(floorLeft==null || map.get(floorLeft)<right)
+            return false;
+        
+        return true;
     }
     
-    public void removeRange(int left, int right) 
-    {
-        Integer start = map.floorKey(left);
-        Integer end = map.floorKey(right);
-       
-       if(end!=null &&  map.get(end)>right) map.put(right,map.get(end));
-       if(start!=null && map.get(start)>left) map.put(start,left);
+    public void removeRange(int left, int right) {
+        Integer floorLeft = map.floorKey(left);
+        Integer floorRight = map.floorKey(right);
+        int newEnd = 0;
+        if(floorRight!=null)
+            newEnd =  map.get(floorRight);
+        
+        if(floorLeft!=null && map.get(floorLeft)>left)
+            map.put(floorLeft,left);
 
-        map.subMap(left,true,right,false).clear();
-       
+        if(floorRight!=null && newEnd>=right)
+            map.put(right,newEnd);
+
+        map.subMap(left,right).clear();
     }
 }
 
