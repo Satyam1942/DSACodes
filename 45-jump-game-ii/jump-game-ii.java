@@ -1,40 +1,34 @@
 class Solution {
     public int jump(int[] nums) {
-        
-        /*
-        [2,3,1,1,4]
-        i = 0 , val =2 , check for 3,1 
-        */ 
-
+        int noOfJumps = 0;
         int length = nums.length;
-        int noOfJumps =0;
-        int maximumThatICanJump = 0;
+        int pointer = 0;
 
-        if(length==1) return 0;
+        if(length==1)
+            return 0;
 
-        for(int index = 0;index<length;)
-        {
-            
-            maximumThatICanJump = nums[index];
-            int maximumIndexReach = index+maximumThatICanJump;
-            if(maximumIndexReach>=length-1) break;
-
-            int maxNextJumpValue=maximumIndexReach;
-            
-            for(int forward = index+1; forward<=maximumIndexReach;forward++)
-            {
-            if(nums[forward]+forward>maxNextJumpValue)
-            {
-                index = forward;
-                maxNextJumpValue =  nums[forward]+forward ;
+        while(pointer<length){
+            int newMaxIndex = pointer + nums[pointer];
+            if(newMaxIndex>=length-1)
+                break;
+            int maxReachable = pointer + nums[pointer];
+            int j = pointer+1;
+            while(j<=maxReachable){
+                if(newMaxIndex<j+nums[j]){
+                    newMaxIndex = j+nums[j];
+                    pointer = j;
+                }
+                j++;
             }
-            }
-
-
-            noOfJumps++;
+            noOfJumps++; 
         }
 
         return noOfJumps+1;
-
     }
 }
+
+/*
+    int maxIndex = 2;
+    int noOfJumps = 1
+    2,1,2,1,4
+ */
