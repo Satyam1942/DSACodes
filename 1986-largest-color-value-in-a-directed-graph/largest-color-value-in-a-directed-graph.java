@@ -44,7 +44,6 @@ class Solution {
         List<List<Integer>> adjList = new ArrayList<>();
         int noOfEdges = edges.length;
         int noOfNodes = colors.length();
-        int indegree[] = new int[noOfNodes];
 
         for(int i =0;i<noOfNodes;i++)
             adjList.add(new ArrayList<>());
