@@ -1,39 +1,54 @@
 class Solution {
-    void rec(int curRow, int curCol, int [][] grid, HashSet<Long> set , long sum)
-    {
-        if(curRow==grid.length-1 && curCol==grid[0].length-1) 
-        {
-            sum*=grid[curRow][curCol];
-            if(sum>=0)set.add(sum);
-            return;
-        }  
+    long mod = (long)(1e9+7);
+    long recursion(int curRow, int curCol, int isPathNegative, int grid[][], Long cache[][][]){
+        if(curRow==grid.length-1 && curCol==grid[0].length-1)
+            return grid[curRow][curCol];
 
-        if(grid[curRow][curCol]==0) {set.add(0l); return;}
+        if(cache[curRow][curCol][isPathNegative]!=null)
+            return cache[curRow][curCol][isPathNegative];
 
-        if(curRow+1<grid.length) rec(curRow+1,curCol,grid,set,sum*grid[curRow][curCol]);
-        if(curCol+1<grid[0].length) rec(curRow,curCol+1,grid,set,sum*grid[curRow][curCol]);
+        long down = Long.MIN_VALUE ,right = Long.MIN_VALUE;
+        int isCurValNegative = (grid[curRow][curCol]<0)? 1:0;
+            
+        if(curRow+1<grid.length)
+            down =  recursion(curRow+1,curCol, Math.abs(isPathNegative-isCurValNegative), grid,cache);
+        if(curCol+1<grid[0].length)
+            right = recursion(curRow,curCol+1,Math.abs(isPathNegative-isCurValNegative), grid,cache);
+     
+        if(down!=Long.MIN_VALUE)
+            down= down*(long)grid[curRow][curCol];
+        if(right!=Long.MIN_VALUE)
+            right= right*(long)grid[curRow][curCol];
+            
+        if(isPathNegative==0){
+            if(down<0 && right<0)
+                return cache[curRow][curCol][isPathNegative] = Long.MIN_VALUE;
+            else
+                return cache[curRow][curCol][isPathNegative] = Math.max(down,right);
+        }
+        else{
+            
+            if(down==Long.MIN_VALUE)
+                down = Long.MAX_VALUE;
+            if(right==Long.MIN_VALUE)
+                right = Long.MAX_VALUE;
+
+            if(down>0 && right>0)
+                return cache[curRow][curCol][isPathNegative] = Long.MIN_VALUE;
+            else
+                return cache[curRow][curCol][isPathNegative] = Math.min(down,right);
+        }
     }
 
     public int maxProductPath(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        long mod =(long)(1e9+7);
-        
-        long sum = 1l;
-        HashSet<Long> set = new HashSet<>();
-        
-        rec(0,0,grid,set,sum);
-   
-        long ans = -1l;
-        for(long i:set) ans = Math.max(ans,i);
-    
-        return (int)(ans%mod);
+        int length = grid.length;
+        int width = grid[0].length;
+        Long cache[][][] = new Long[length][width][2];
+        long res =  recursion(0,0,0,grid,cache);
 
+        if(res==Long.MIN_VALUE)
+            return -1;
+        else
+            return (int)(res%mod);
     }
 }
-
-/*
-    -1  3  0
-     3 -2  3
-    -1  1 -4
- */
