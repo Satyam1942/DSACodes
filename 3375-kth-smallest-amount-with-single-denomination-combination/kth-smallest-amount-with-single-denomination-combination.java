@@ -25,11 +25,8 @@ class Solution {
         return (a*b)/getGcd(a,b);
     }
 
-    public long findKthSmallest(int[] coins, int k) {
-        Arrays.sort(coins);
-        List<Long> lcmList = new ArrayList<>();
-        int length = coins.length;
-
+    void getLcmList(int length, int coins[], List<Long> lcmList){
+        
         for(int i=1;i<(1<<length);i++){
             long lcm = 0;
             int count = 0;
@@ -44,7 +41,13 @@ class Solution {
             }
             lcmList.add(lcm*((count%2==0)?-1:1));
         }
-   
+    }
+
+    public long findKthSmallest(int[] coins, int k) {
+        Arrays.sort(coins);
+        List<Long> lcmList = new ArrayList<>();
+        int length = coins.length;
+        getLcmList(length,coins,lcmList);
 
         long left = coins[0];
         long right = (long)coins[0]*(long)k;
