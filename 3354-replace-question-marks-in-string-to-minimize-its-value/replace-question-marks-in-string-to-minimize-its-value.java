@@ -1,54 +1,44 @@
 class Solution {
     public String minimizeStringValue(String s) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->((a[1]==b[1])? a[0]-b[0] : a[1]-b[1]));
+        int length = s.length();
         int questionMarkCount = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->((a[1]==b[1])?a[0]-b[0]:a[1]-b[1]));
         int freq[] = new int[26];
-        for(int i=0;i<s.length();i++){
-            char  ch = s.charAt(i);
-            if(ch>='a' && ch<='z'){
-                int index = (int)ch-97;
-                freq[index]++;
-            }else{
+
+        for(int i=0;i<length;i++){
+            char token =  s.charAt(i);
+            if(token=='?'){
                 questionMarkCount++;
+            }else{
+                freq[(int)token-97]++;
             }
         }
 
         for(int i=0;i<26;i++){
-            int ch = i;
-            int freqOfCh = freq[i];
-            int temp[] = new int[2];
-            temp[0] = ch;
-            temp[1] = freqOfCh;
-            pq.add(temp);
+            pq.add(new int[]{i,freq[i]});
         }
 
-        List<Character> list = new ArrayList<>();
+        List<Character> replacedCharacterList = new ArrayList<>(); 
         while(questionMarkCount-->0){
-            int ele = pq.peek()[0];
-            char ch = (char)(ele+97);
+            int ch = pq.peek()[0];
             int curFreq = pq.peek()[1];
             pq.poll();
-            int temp[] = new int[2];
-            temp[0] = ele;
-            temp[1] = curFreq+1;
-            pq.add(temp);
-            list.add(ch);
+            pq.add(new int[]{ch,curFreq+1});
+            replacedCharacterList.add((char)(ch+97));
         }
 
-        Collections.sort(list);
-        int j = 0;
-        StringBuilder ans = new StringBuilder();
-        for(int i=0;i<s.length();i++){
-            char  ch = s.charAt(i);
-            if(ch>='a' && ch<='z'){
-                ans.append(ch);
-            }else{
-                ans.append(list.get(j));
-                j++;
-            }
+        Collections.sort(replacedCharacterList);
+
+        StringBuilder sb = new StringBuilder();
+        int pointer = 0;
+        for(int i=0;i<length;i++){
+            char token = s.charAt(i);
+            if(token=='?')
+                sb.append(replacedCharacterList.get(pointer++));
+            else    
+                sb.append(token);
         }
 
-        return ans.toString();
-
+        return sb.toString();
     }
 }
