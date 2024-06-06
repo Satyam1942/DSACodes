@@ -1,34 +1,37 @@
 class Solution {
     public boolean isNStraightHand(int[] hand, int groupSize) {
+        TreeMap<Integer, Integer> freq = new TreeMap<>();
+        int length = hand.length;
+        if (length % groupSize != 0)
+            return false;
 
-        Arrays.sort(hand);
-        HashMap<Integer, Queue<Integer>> map = new HashMap<>();
-        int totalCards = hand.length;
-   
-        for (int idx = 0; idx < totalCards; idx++) {
-            if (map.containsKey(hand[idx])) {
-                int val = map.get(hand[idx]).poll();
-                if (map.get(hand[idx]).size() == 0) map.remove(hand[idx]);
-                if (val == 0) continue;
+        for (int i = 0; i < length; i++) {
+            int curFreq = freq.getOrDefault(hand[i], 0);
+            freq.put(hand[i], curFreq + 1);
+        }
 
-                int key = hand[idx] + 1;
-                int newVal = val - 1;
+        while (!freq.isEmpty()) {
+            int firstElement = freq.firstKey();
+            int curFreq = freq.get(firstElement);
+            if (curFreq != 1)
+                freq.put(firstElement, curFreq - 1);
+            else
+                freq.remove(firstElement);
 
-                if (!map.containsKey(key))map.put(key, new LinkedList<>());
-                map.get(key).add(newVal);
-
-            } else {
-                int key = hand[idx] + 1;
-                int val = groupSize-2;
-                if(val>=0)
-                {
-                if (!map.containsKey(key))map.put(key, new LinkedList<>());
-                map.get(key).add(val);
+            for (int i = firstElement + 1; i < firstElement + groupSize; i++) {
+                if (!freq.containsKey(i))
+                    return false;
+                else {
+                    curFreq = freq.get(i);
+                    if (curFreq != 1)
+                        freq.put(i, curFreq - 1);
+                    else
+                        freq.remove(i);
                 }
             }
         }
-  
-        return map.isEmpty();
+
+        return true;
 
     }
 }
