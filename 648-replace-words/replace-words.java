@@ -20,14 +20,7 @@ class Solution {
         words.add(word.toString());
     }
 
-    public String replaceWords(List<String> dictionary, String sentence) {
-        int lengthOfDictionary = dictionary.size();
-        int lengthOfSentence = sentence.length();
-        List<String> words = new ArrayList<>();
-        HashSet<String> dictionarySet = new HashSet<>();
-
-        addToSet(dictionary, dictionarySet);
-        buildWords(sentence, words);
+    String mapWords(List<String> words,  HashSet<String> dictionarySet) {
 
         HashMap<String, String> mapRoot = new HashMap<>();
         StringBuilder ansString = new StringBuilder();
@@ -55,6 +48,18 @@ class Solution {
                 mapRoot.put(curWord, curWord);
             }
         }
+        return ansString.toString();
+    }
+
+    public String replaceWords(List<String> dictionary, String sentence) {
+        int lengthOfDictionary = dictionary.size();
+        int lengthOfSentence = sentence.length();
+        List<String> words = new ArrayList<>();
+        HashSet<String> dictionarySet = new HashSet<>();
+
+        addToSet(dictionary, dictionarySet);
+        buildWords(sentence, words);
+        String ansString = mapWords(words,dictionarySet);
 
         int ansLength = ansString.length();
         return ansString.substring(0, ansLength - 1);
