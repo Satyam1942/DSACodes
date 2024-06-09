@@ -1,45 +1,53 @@
 class Solution {
-    int[][] createPrefixMatrix(int matrix[][]){
-        int m = matrix.length;
-        int n = matrix[0].length;
-        int prefixMatrix[][] = new int[m+1][n+1];
-        
-        for(int i=0;i<m;i++){
-            int prefixSumRow = 0;
-            for(int j=0;j<n;j++){
-                prefixSumRow+=matrix[i][j];
-                prefixMatrix[i+1][j+1] = prefixSumRow+prefixMatrix[i][j+1];
-            }
+    void createPrefixMatrix(int prefixSum[][] , int matrix[][]){
+        int length = matrix.length;
+        int width = matrix[0].length;
+    
+        int sum =0;
+        for(int i=0;i<width;i++){
+            sum += matrix[0][i];
+            prefixSum[0][i] = sum;
         }
 
-        return prefixMatrix;
+        for(int i=1;i<length;i++){
+            sum = 0;
+            for(int j=0;j<width;j++){
+                sum+=matrix[i][j];
+                prefixSum[i][j] = sum+prefixSum[i-1][j];
+            }
+        } 
     }
-
-    int sum(int row1,int col1, int row2, int col2, int prefixMatrix[][]){
-        return prefixMatrix[row2+1][col2+1]-prefixMatrix[row1][col2+1] 
-                -prefixMatrix[row2+1][col1] + prefixMatrix[row1][col1];
+    int getPrefixSum(int i, int j, int k, int l, int prefixMatrix[][]){
+       int max =  prefixMatrix[j][l];
+       int upBoundary = (i==0)? 0:prefixMatrix[i-1][l];
+       int leftBoundary = (k==0)?0: prefixMatrix[j][k-1];
+       int diagonalBoundary = (i==0||k==0)?0:prefixMatrix[i-1][k-1];
+       return max-upBoundary-leftBoundary+diagonalBoundary;
     }
-
     public int numSubmatrixSumTarget(int[][] matrix, int target) {
-         int m = matrix.length;
-         int n = matrix[0].length;
+        int length = matrix.length;
+        int width = matrix[0].length;
+        int prefixMatrix[][] = new int[length][width];
 
-        int prefixSum[][] = new int[m+1][n+1];
-        prefixSum = createPrefixMatrix(matrix);
+        createPrefixMatrix(prefixMatrix,matrix);
 
-        long count = 0;
-        for(int row1=0;row1<m;row1++){
-            for(int row2=row1;row2<m;row2++){
+        int count = 0;
+        for(int i=0;i<length;i++){
+            for(int j=i;j<length;j++){
                 HashMap<Integer,Integer> map = new HashMap<>();
                 map.put(0,1);
-                int tempSum = 0;
-                for(int col1=0;col1<n;col1++){
-                    tempSum += sum(row1,col1,row2,col1,prefixSum);
-                    count+= map.getOrDefault(tempSum-target,0);
-                    map.put(tempSum,map.getOrDefault(tempSum,0)+1);
+                int sum = 0;
+                for(int l=0;l<width;l++){
+                    sum += getPrefixSum(i,j,l,l,prefixMatrix);
+                    if(map.containsKey(sum-target)){
+                        int freq = map.get(sum-target);
+                        count+=freq;
+                    }
+                    map.put(sum,map.getOrDefault(sum,0)+1);
                 }
             }
         }
-        return (int)count;
+
+        return count;
     }
 }
