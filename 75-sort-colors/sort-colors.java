@@ -15,8 +15,8 @@ class Solution {
                 left++;
             if(left==length)
                 break;
-            if(right<=left)
-                right = left+1;
+            
+            right = Math.max(right,left+1);
             if(right<length && nums[right]==0){
                 swap(nums,left,right);
             }
@@ -30,9 +30,7 @@ class Solution {
             }
             if(left==length)
                 break;
-            if(right<=left)
-                right = left+1;
-
+            right = Math.max(right,left+1);
             if(right<length && nums[right]==1){
                 swap(nums,left,right);
             }
