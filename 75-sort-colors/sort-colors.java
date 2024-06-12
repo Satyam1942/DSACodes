@@ -1,35 +1,48 @@
 class Solution {
-    void swap(int nums[] ,int a, int b)
-    {
-        int temp = nums[a];
-        nums[a]= nums[b];
-        nums[b]= temp;
+    void swap(int nums[], int left , int right){
+        int temp = nums[left];
+        nums[left] = nums[right];
+        nums[right] = temp;
     }
 
     public void sortColors(int[] nums) {
-        int left =0,mid= 0, right = nums.length-1;
-        
-        while(mid<=right)
-        {
-            if(nums[mid]==0)
-            {
-                swap(nums,left,mid);
+        int left = 0;
+        int right = 1;
+        int length = nums.length;
+
+        while(right<=length){
+            while(left<length && nums[left]==0)
+                left++;
+            if(left==length)
+                break;
+            if(right<=left)
+                right = left+1;
+            if(right<length && nums[right]==0){
+                swap(nums,left,right);
+            }
+            right++;
+        }
+    
+        right = left+1;
+        while(right<=length){
+            while(left<length && nums[left]==1){
                 left++;
             }
-            else if(nums[mid]==2)
-            {
-                swap(nums,right,mid);
-                right--;
-            }
-            else mid++;
+            if(left==length)
+                break;
+            if(right<=left)
+                right = left+1;
 
-            if(left>mid) mid= left;
-            
+            if(right<length && nums[right]==1){
+                swap(nums,left,right);
+            }
+            right++;
         }
 
     }
 }
-
 /*
-    [0,0,1,1,2,2]
+                   r
+    0, 0, 2, 1, 1, 2
+          l
  */
