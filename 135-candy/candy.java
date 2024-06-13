@@ -1,41 +1,71 @@
-class Pair{
-    int  num , index;
-    Pair(int num ,int index)
-    {
-        this.num = num;
-        this.index= index;
-    }
-}
 class Solution {
     public int candy(int[] ratings) {
-        int n =ratings.length;
-     PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)->a.num-b.num);
-    int noOfChocolates[] = new int[n];
+        int length = ratings.length;
+        Integer candies[] = new Integer[length];
+        if(length==1)
+            return 1;
 
-    for(int i=0;i<n;i++) pq.add(new Pair(ratings[i],i));
+        //first pass
+        for(int i=0;i<length;i++){
+            if(i==0){
+                if(ratings[i+1]>=ratings[i])
+                    candies[i] =1;
+            }else if(i==length-1){
+                if(ratings[i]<=ratings[i-1])
+                    candies[i] =1;
+            }else{
+                if(ratings[i]<=ratings[i+1] && ratings[i]<=ratings[i-1])
+                    candies[i] =1;
+            }
+        }
 
-     while(!pq.isEmpty())
-     {
-         int num = pq.peek().num;
-         int index = pq.peek().index;
-         pq.poll();
-
-      if(num>ratings[Math.min(index+1,n-1)]) 
-        noOfChocolates[index] = Math.max(noOfChocolates[index],
-                                noOfChocolates[Math.min(index+1,n-1)]+1);
-    
-     if(num>ratings[Math.max(index-1,0)])
-     noOfChocolates[index]= Math.max(noOfChocolates[index],
-                        noOfChocolates[Math.max(index-1,0)]+1);
-    
-     if(num<=ratings[Math.min(index+1,n-1)] && 
-     num<=ratings[Math.max(index-1,0)])  noOfChocolates[index]= 1;
-
-     }
-
-        int totalCandies=0;
-        for(int i:noOfChocolates) { totalCandies+=i;}
+        //second pass
+        for(int i=1;i<length-1;i++){
+            if(ratings[i]>ratings[i-1] && ratings[i]<=ratings[i+1]){
+                if(candies[i-1]!=null)
+                    candies[i] = candies[i-1]+1;
+            }else if(ratings[i]<=ratings[i-1] && ratings[i]>ratings[i+1]){
+                if(candies[i+1]!=null)
+                    candies[i] = candies[i+1]+1;
+            }
+        }
         
-        return totalCandies;
+        // System.out.println(Arrays.toString(candies));
+
+        for(int i=length-2;i>=1;i--){
+            if(ratings[i]>ratings[i-1] && ratings[i]<=ratings[i+1]){
+                candies[i] = candies[i-1]+1;
+            }else if(ratings[i]<=ratings[i-1] && ratings[i]>ratings[i+1]){
+                candies[i] = candies[i+1]+1;
+            }
+        }
+        //  System.out.println(Arrays.toString(candies));
+        
+        //third pass
+        for(int i=0;i<length;i++){
+            if(candies[i]==null){
+                if(i==0)
+                    candies[i] = 1+candies[i+1];
+                else if(i==length-1)
+                    candies[i] = 1+candies[i-1];
+                else
+                    candies[i]= 1+Math.max(candies[i+1],candies[i-1]);
+            }
+        }
+
+
+        int totalCandy = 0;
+        for(int candy: candies)
+            totalCandy+=candy;
+
+        return totalCandy;
     }
 }
+
+/*
+    [1,4,3,8,7,6,5,9,3]
+    [1,2,1,2,3,4,1,2,1] = 17
+    in 1st pass ; mark all students whose rating is less than or equal to both neighbours
+    in 2nd pass : mark all students whose rating is less than or equal to  one of the neighbors'
+    in 3rd pass: mark all highest rated students
+ */
