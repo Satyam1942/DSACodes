@@ -21,12 +21,8 @@ class Solution {
         flatten(root.right);
         flatten(root.left);
 
-        if(prev==null)
-            prev = root;
-        else{
-            root.right = prev;
-            root.left = null;
-            prev = root;
-        }
+        root.right = prev;
+        root.left = null;
+        prev = root;
     }
 }
