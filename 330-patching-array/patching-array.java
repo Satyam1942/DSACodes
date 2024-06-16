@@ -7,7 +7,6 @@ class Solution {
         for(int i=0;i<length;){
             if(prefixSum>=n)
                 break;
-                
             if(prefixSum+1<nums[i]){
                 count++;
                 prefixSum+= (prefixSum+1);
@@ -26,7 +25,5 @@ class Solution {
     }
 }
 /*
-    1, 5, 10
-    2,4 
-    2
+  Sorting is necessary !! As its already sorted ; no need to sort again!!
  */
