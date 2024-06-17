@@ -2,10 +2,8 @@ class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int m = nums1.length;
         int n = nums2.length;
-        
-        if(n<m)
+        if(m>n)
             return findMedianSortedArrays(nums2,nums1);
-            
         int left = 0 ;
         int right = m;
         int totalElementsInGroup = (m+n+1)/2;
@@ -49,7 +47,22 @@ class Solution {
     odd median => max(firstMax,secondMax);
     even Median => max(firstMax,secondMax)+min(firstMin, secondMin) / 2;
 
-    1 3
-    2 7
+    1,2,3,5,6
+    4
+    
+    left = 3;
+    right = 5
+    totalElements= 3
+    cut1 = 4
+    cut2 = -1
 
+
+    4
+    1,2,3,5,6
+
+    left = 0
+    right = 1
+    totalElements = 3
+    cut1 = 0
+    cut2 = 3
  */
