@@ -1,30 +1,55 @@
 class Solution {
-    public double findMedianSortedArrays(int[] a, int[]b) {
-        int n =a.length;
-        int m = b.length;
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
         
-        if(m<n) return findMedianSortedArrays(b ,a);
-        int totalLength = (n+m+1)/2;
-        int left = 0, right = n;
-        while(left<=right)
-        {
+        if(n<m)
+            return findMedianSortedArrays(nums2,nums1);
+            
+        int left = 0 ;
+        int right = m;
+        int totalElementsInGroup = (m+n+1)/2;
+        boolean isEven = (m+n)%2==0;
+        
+        while(left<=right){
             int cut1 = (left+right)/2;
-            int cut2 = totalLength-cut1;
+            int cut2 =  totalElementsInGroup-cut1;
 
-            int left1= (cut1==0)? Integer.MIN_VALUE: a[cut1-1];
-            int left2= (cut2==0)? Integer.MIN_VALUE: b[cut2-1];
-            int right1=(cut1==n)? Integer.MAX_VALUE: a[cut1];
-            int right2=(cut2==m)? Integer.MAX_VALUE: b[cut2];
-
-            if(left1<=right2 && left2<= right1)
-            {
-                if((n+m)%2==0){return ((double)(Math.max(left1,left2)+Math.min(right1,right2))/2);}
-                else return Math.max(left1,left2);
-            }else if(left1>right2) right =cut1-1;
-            else left=cut1+1;
-
+            int array1LeftElement  =  (cut1!=0)?nums1[cut1-1]:Integer.MIN_VALUE;
+            int array1RightElement = (cut1!=m)?nums1[cut1]:Integer.MAX_VALUE;
+            int array2LeftElement  =  (cut2!=0)?nums2[cut2-1]:Integer.MIN_VALUE;
+            int array2RightElement = (cut2!=n)?nums2[cut2]:Integer.MAX_VALUE;
+          
+            if(array1LeftElement>array2RightElement)
+                right = cut1-1;
+            else if(array2LeftElement>array1RightElement)
+                left = cut1+1;
+            else{
+                if(isEven)
+                    return (Math.max(array1LeftElement,array2LeftElement) + Math.min(array1RightElement,array2RightElement))/2.0;
+                else
+                    return Math.max(array1LeftElement,array2LeftElement);
+            }
         }
 
         return 0.0;
-   }
+    }
 }
+/*
+    1,3,5,6,9
+    2,3,4,7
+
+    total = 10
+    median = 5
+
+    int mid = 1
+    if you need more element of 2nd grp decrease mid => when firstmax arr1 >secondMin arr2 
+    else increase mid firstmax arr2> secondMin arr1
+
+    odd median => max(firstMax,secondMax);
+    even Median => max(firstMax,secondMax)+min(firstMin, secondMin) / 2;
+
+    1 3
+    2 7
+
+ */
