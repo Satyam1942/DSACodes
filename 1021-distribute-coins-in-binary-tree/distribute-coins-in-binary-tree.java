@@ -13,32 +13,20 @@
  *     }
  * }
  */
-class Pair{
-    int sizeOfSubtree;
-    int numberOfCoins;
-    Pair(int sizeOfSubtree, int numberOfCoins){
-        this.sizeOfSubtree = sizeOfSubtree;
-        this.numberOfCoins = numberOfCoins;
-    }
-}
-
 class Solution {
-    int res = 0;
-    Pair postOrderTraversal(TreeNode root){
+    int totalCoins = 0;
+    int postOrderTraversal(TreeNode root){
         if(root==null)
-            return new Pair(0,0);
-        Pair leftPair  = postOrderTraversal(root.left);
-        Pair rightPair = postOrderTraversal(root.right);
-
-        int extraCoinsLeft = Math.abs(leftPair.sizeOfSubtree-leftPair.numberOfCoins);
-        int extraCoinsRight = Math.abs(rightPair.sizeOfSubtree-rightPair.numberOfCoins);
-        
-        res += extraCoinsLeft+extraCoinsRight;
-        return new Pair(1+leftPair.sizeOfSubtree+rightPair.sizeOfSubtree , root.val+ leftPair.numberOfCoins+ rightPair.numberOfCoins);
+            return 0;
+        int leftCoins = postOrderTraversal(root.left);
+        int rightCoins = postOrderTraversal(root.right);
+        int curCoinsRequired = 1-root.val;
+        totalCoins+= Math.abs(curCoinsRequired+leftCoins+rightCoins);
+        return curCoinsRequired+leftCoins+rightCoins;
     }
 
     public int distributeCoins(TreeNode root) {
         postOrderTraversal(root);
-        return res;
+        return totalCoins;
     }
 }
