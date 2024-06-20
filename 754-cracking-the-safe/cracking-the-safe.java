@@ -1,39 +1,51 @@
 class Solution {
-    String ans = "";
-    boolean dfs(String s, int n, int k, HashSet<String> vis){
-        String lastNCharacter = s.substring(s.length()-n,s.length());
-     
-        //path has added redundancy so dont take it
-        if(vis.contains(lastNCharacter))
+    StringBuilder minLengthPassword = new StringBuilder();
+
+    boolean generatePasswords(StringBuilder sourcePassword , HashSet<String> visPasswords, int n, int k){
+
+        int length = sourcePassword.length();
+        String lastNCharacters = sourcePassword.substring(length-n,length);
+
+        if(visPasswords.contains(lastNCharacters))
             return false;
 
-        vis.add(lastNCharacter);
-        if(vis.size()==(int)Math.pow(k,n))
+        visPasswords.add(lastNCharacters);
+        
+        if(visPasswords.size()==Math.pow(k,n))
             return true;
 
         for(int i=0;i<k;i++){
-            String nstr =  s+String.valueOf(i);
-          
-            boolean temp = dfs(nstr,n,k,vis);
-            if(temp){
-                ans = String.valueOf(i)+ans;
+            char token = (char)(i+48);
+            sourcePassword.append(token);
+            boolean res =  generatePasswords(sourcePassword,visPasswords,n,k);
+            if(res){
+                minLengthPassword.append(token);
                 return true;
             }
+            sourcePassword.deleteCharAt(length);
         }
 
-        vis.remove(lastNCharacter);
+        visPasswords.remove(lastNCharacters);
         return false;
     }
-    public String crackSafe(int n, int k) {
-        StringBuilder init = new StringBuilder();
-        for(int i=0;i<n;i++)
-            init.append("0");
-        HashSet<String> vis = new HashSet<>();
 
-        dfs(init.toString(),n,k,vis);
+    public String crackSafe(int n, int k) {
+        StringBuilder sourcePassword = new StringBuilder();
+        HashSet<String> visPasswords = new HashSet<>();
+
         for(int i=0;i<n;i++)
-            ans="0"+ans;
-            
-        return ans;
+            sourcePassword.append('0');
+
+        generatePasswords(sourcePassword, visPasswords,n,k);
+        
+        for(int i=0;i<n;i++)
+            minLengthPassword.append('0');
+
+        minLengthPassword.reverse();
+        return minLengthPassword.toString();
     }
 }
+
+/*
+00
+*/
