@@ -13,13 +13,11 @@ class Solution {
         }
         int maxCustomerSum = 0;
         int runningCustomerSum = 0;
-        // for(int i=0;i<grumpyIndices.size();i++){
-        //     System.out.println(Arrays.toString(grumpyIndices.get(i)));
-        // }
 
         int left = 0;
         int right = 0;
         length = grumpyIndices.size();
+        
         while (left <= right && right <= length) {
 
             if (right < length &&
