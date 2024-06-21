@@ -11,15 +11,16 @@ class Solution {
                 grumpyIndices.add(new int[] { customers[i], i });
             }
         }
+
         int maxCustomerSum = 0;
         int runningCustomerSum = 0;
 
         int left = 0;
         int right = 0;
         length = grumpyIndices.size();
-        
-        while (left <= right && right <= length) {
 
+        while (left <= right && right <= length) {
+            
             if (right < length &&
                     grumpyIndices.get(right)[1] - grumpyIndices.get(left)[1] >= minutes) {
                 runningCustomerSum -= grumpyIndices.get(left)[0];
@@ -31,6 +32,7 @@ class Solution {
                 runningCustomerSum += grumpyIndices.get(right)[0];
                 maxCustomerSum = Math.max(maxCustomerSum, runningCustomerSum);
             }
+
             right++;
         }
 
