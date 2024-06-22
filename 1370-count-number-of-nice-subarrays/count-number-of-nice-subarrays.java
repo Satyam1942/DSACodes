@@ -1,36 +1,36 @@
 class Solution {
-    public int numberOfSubarrays(int[] nums, int k) {
+    public int atMostK(int[]nums, int k){
         int length = nums.length;
         int left = 0;
         int right = 0;
-        
-        int subArrayCount = 0;
-        Queue<Integer> q = new LinkedList<>();
-        
+        int  count = 0;
+        int oddCount = 0;
+
         while(left<=right && right<=length){
-            if(q.size()>k){
-                if(nums[left]%2!=0){
-                    q.poll();
-                }
+
+            if(oddCount>k){
+                if(nums[left]%2!=0)
+                    oddCount--;
                 left++;
                 continue;
             }
-
-            if(q.size()==k){
-                subArrayCount += q.peek()-left+1;
-            }
-        
-            if(right<length && nums[right]%2!=0){
-                q.add(right);
-            }
-           
+            
+            count+=right-left;
+            
+            if(right<length && nums[right]%2!=0)
+                oddCount++;
+                
             right++;
         }
 
-        return subArrayCount;
+        return count;
+    }
+
+    public int numberOfSubarrays(int[] nums, int k) {
+       return atMostK(nums,k)-atMostK(nums,k-1);
     }
 }
 
 /*
-    l = 0
+    14-
 */
