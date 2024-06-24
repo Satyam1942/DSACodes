@@ -165,4 +165,8 @@ class Solution {
     HVH
     VVV
     HHH
+
+    There are only 6 patterns possible. 
+    For each pattern , find minimum area that one rectangle 
+    can form using function of previous problem
  */
