@@ -1,42 +1,30 @@
 class Solution {
     public int minKBitFlips(int[] nums, int k) {
-  
         int length = nums.length;
         int count = 0;
-        Queue<Integer> q = new LinkedList<>();
+
+        int noOfFlipsInCurrentWindow = 0;
         int problematicBit = 0;
         int pointer = 0;
         
         while(pointer<length){
+            if(pointer-k>=0 && nums[pointer-k]==2)
+                noOfFlipsInCurrentWindow--;
+            problematicBit = (noOfFlipsInCurrentWindow%2==0)?0:1;
+
             if(nums[pointer]==problematicBit){
+                if(pointer+k-1>=length)
+                    return -1;
                 count++;
-                q.add(pointer+k-1);
+                noOfFlipsInCurrentWindow++;
+                nums[pointer] = 2;
             }
-            
-            if(!q.isEmpty() && q.peek()==pointer)
-                q.poll();
-            problematicBit = (q.size()%2==0)?0:1;
+
+
             pointer++;
         }
 
-        if(!q.isEmpty())
-            return -1;
-
-        return count;
-        
+        return count;    
     }
 }
 
-/*
-    for k=1 => no of zeroes
-    for k=2 => 
-
-    0,0,0,1,0,1,1,0
-    1,1,1,1,1,1,1,1
-
-    int count = 3;
-    int windowSize = 2;
-    flag = 1;
-    Queue=>  7
-    
- */
