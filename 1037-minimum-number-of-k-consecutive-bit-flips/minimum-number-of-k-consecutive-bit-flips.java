@@ -19,8 +19,6 @@ class Solution {
                 noOfFlipsInCurrentWindow++;
                 nums[pointer] = 2;
             }
-
-
             pointer++;
         }
 
