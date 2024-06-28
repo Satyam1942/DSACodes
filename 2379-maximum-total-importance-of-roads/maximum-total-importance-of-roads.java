@@ -5,7 +5,6 @@ class Solution {
 
         for(int i=0;i<noOfCities;i++){
             indegree[i][1] = i;
-            indegree[i][1] = i;
         }
 
         for (int i = 0; i < numberOfRoads; i++) {
