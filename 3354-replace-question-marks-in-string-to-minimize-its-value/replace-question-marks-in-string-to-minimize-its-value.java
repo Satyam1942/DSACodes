@@ -1,44 +1,74 @@
+class Pair implements Comparator<Pair>{
+    char token;
+    int freq;
+    
+    Pair(){
+
+    }
+
+    Pair(char token ,int freq){
+        this.token = token;
+        this.freq =  freq;
+    }
+
+    @Override
+    public int compare(Pair a, Pair b){
+        if(a.freq==b.freq)
+            return (int)a.token-(int)b.token;
+        else
+            return a.freq - b.freq;
+    }
+}
+
 class Solution {
     public String minimizeStringValue(String s) {
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->((a[1]==b[1])? a[0]-b[0] : a[1]-b[1]));
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new Pair());
         int length = s.length();
-        int questionMarkCount = 0;
         int freq[] = new int[26];
+        int noOfQuestionMarks = 0;
 
         for(int i=0;i<length;i++){
-            char token =  s.charAt(i);
-            if(token=='?'){
-                questionMarkCount++;
-            }else{
+            char token = s.charAt(i);
+            if(token!='?'){
                 freq[(int)token-97]++;
-            }
+            }else
+                noOfQuestionMarks++;
         }
 
         for(int i=0;i<26;i++){
-            pq.add(new int[]{i,freq[i]});
+            pq.add(new Pair((char)(i+97),freq[i]));
         }
-
-        List<Character> replacedCharacterList = new ArrayList<>(); 
-        while(questionMarkCount-->0){
-            int ch = pq.peek()[0];
-            int curFreq = pq.peek()[1];
-            pq.poll();
-            pq.add(new int[]{ch,curFreq+1});
-            replacedCharacterList.add((char)(ch+97));
-        }
-
-        Collections.sort(replacedCharacterList);
 
         StringBuilder sb = new StringBuilder();
-        int pointer = 0;
-        for(int i=0;i<length;i++){
-            char token = s.charAt(i);
-            if(token=='?')
-                sb.append(replacedCharacterList.get(pointer++));
-            else    
-                sb.append(token);
+        while(noOfQuestionMarks-->0){
+            char optimalCharacter = pq.peek().token;
+            int freqChar = pq.peek().freq;
+            pq.poll();
+            pq.add(new Pair(optimalCharacter,freqChar+1));
+            sb.append(optimalCharacter);
         }
 
-        return sb.toString();
+        int pointer = 0;
+        char questionMark[] = sb.toString().toCharArray();
+        Arrays.sort(questionMark);
+        String fillString = new String(questionMark);
+        StringBuilder ans = new StringBuilder();
+        for(int i=0;i<length;i++){
+            char token = s.charAt(i);
+            if(token=='?'){
+                ans.append(fillString.charAt(pointer));
+                pointer++;
+            }else
+                ans.append(token);
+        }
+
+        return ans.toString();
     }
 }
+
+/*
+    c-1
+    b-1
+    a-2
+
+*/
