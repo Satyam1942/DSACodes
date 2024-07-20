@@ -1,51 +1,30 @@
 class Solution {
-    public boolean checkValidString(String language) {
-        int length = language.length();
-        TreeSet<Integer> starIndex = new TreeSet<>();
-        Stack<Integer> st = new Stack<>();
-        for (int i = 0; i < length; i++) {
-            char token = language.charAt(i);
-            if (token == '*')
-                starIndex.add(i);
-            else if (token == '(')
-                st.push(i);
-            else {
-                if (!st.isEmpty()) {
-                    if (language.charAt(st.peek()) == '(')
-                        st.pop();
-                    else
-                        st.push(i);
-                } else
-                    st.push(i);
+    public boolean checkValidString(String s) {
+        int length = s.length();
+        int openCountMin =0, openCountMax = 0;
+        for(int i=0;i<length;i++){
+            char token = s.charAt(i);
+            if(token=='('){
+                openCountMin++;
+                openCountMax++;
+            }else if(token==')'){
+                openCountMin--;
+                openCountMax--;
+            }else if(token=='*') {
+                openCountMax++;
+                openCountMin--;
             }
 
+            if(openCountMax<0)
+                return false;
+                
+            openCountMin  = Math.max(openCountMin,0);
         }
 
-        List<Integer> wrongParenthesisList = new ArrayList<>();
-        while (!st.isEmpty()) {
-            wrongParenthesisList.add(st.pop());
-        }
-
-        int lengthOfList = wrongParenthesisList.size();
-        for (int i = lengthOfList - 1; i >= 0; i--) {
-            int index = wrongParenthesisList.get(i);
-            char token = language.charAt(index);
-            if (token == ')') {
-                Integer key = starIndex.floor(index);
-                if (key != null)
-                    starIndex.remove(key);
-                else
-                    return false;
-            } else {
-                Integer key = starIndex.ceiling(index);
-                if (key != null)
-                    starIndex.remove(key);
-                else
-                    return false;
-            }
-
-        }
-        return true;
-
+        return openCountMin==0;
     }
 }
+
+/*
+
+*/
