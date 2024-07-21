@@ -42,11 +42,20 @@ class Solution {
 
     }
 
+    void buildMap(HashMap<Integer,List<Integer>> map, List<Integer> topoSort ,int k){
+        for(int i=0;i<k;i++){
+            int node = topoSort.get(i);
+            map.get(node).add(k-i-1);
+        }
+    }
+
     public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {
         List<List<Integer>> adjListRow = new ArrayList<>();
         List<List<Integer>> adjListCol = new ArrayList<>();
         List<Integer> rowTopoSort = new ArrayList<>();
         List<Integer> colTopoSort = new ArrayList<>();
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+        int matrix[][] = new int[k][k];
         
 
         buildGraph(adjListRow,rowConditions,k);
@@ -58,21 +67,11 @@ class Solution {
         if(!isRowTopoSort || !isColTopoSort)
             return new int[0][0];
 
-        HashMap<Integer,List<Integer>> map = new HashMap<>();
         for(int i=1;i<=k;i++)
             map.put(i,new ArrayList<>());
 
-        for(int i=0;i<k;i++){
-            int node = rowTopoSort.get(i);
-            map.get(node).add(k-i-1);
-        }
-
-        for(int i=0;i<k;i++){
-            int node = colTopoSort.get(i);
-            map.get(node).add(k-i-1);
-        }
-
-        int matrix[][] = new int[k][k];
+        buildMap(map,rowTopoSort,k);
+        buildMap(map,colTopoSort,k);
 
         for(Map.Entry<Integer,List<Integer>> i: map.entrySet()){
             int key = i.getKey();
