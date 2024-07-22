@@ -27,6 +27,7 @@ class Tap implements Comparator<Tap>{
 class Solution {
     public int minTaps(int n, int[] ranges) {
         Tap tap[] = new Tap[n+1];
+
         for(int i=0;i<=n;i++){
             int end = i+ranges[i];
             int start = Math.max(0,i-ranges[i]);
@@ -34,27 +35,23 @@ class Solution {
         }
 
         Arrays.sort(tap,new Tap());
+
         int maxEnd = tap[0].end;
         int minCount = 1;
-        // System.out.println(Arrays.toString(tap));
 
         for(int i=1;i<=n;){
             if(maxEnd>=n)
                 break;
-                
             int newMaxEnd = maxEnd;
             while(i<=n && tap[i].start<=maxEnd){
                 newMaxEnd = Math.max(newMaxEnd,tap[i].end);
                 i++;
             }
-         
             if(newMaxEnd==maxEnd)
                 return -1;
-
             maxEnd = newMaxEnd;
             minCount++;
         }
-
 
         return minCount;
     }
