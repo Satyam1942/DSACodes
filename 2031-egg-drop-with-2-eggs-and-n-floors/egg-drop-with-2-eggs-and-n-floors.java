@@ -1,20 +1,24 @@
 class Solution {
-    int rec(int floor , Integer dp[] ){
-        if(floor==0)
-            return 0;
-        if(dp[floor]!=null)
-            return dp[floor];
+    int dropEgg(int n, int noOfEggs, Integer cache[][]){
+        if(noOfEggs==1)
+            return n;
+        if(n<=1)
+            return n;
+        if(cache[n][noOfEggs]!=null)
+            return cache[n][noOfEggs];
 
-        int mini = Integer.MAX_VALUE;
-        for(int i=1;i<=floor;i++){            
-            int eggBreaks = i;
-            int eggNotBreaks = 1+rec(floor-i,dp);
-            mini = Math.min(mini , Math.max(eggBreaks,eggNotBreaks));
+        int minMoves = Integer.MAX_VALUE;
+        for(int floor = 1;floor<=n;floor++){
+            int eggBreaks = dropEgg(floor-1,noOfEggs-1,cache);
+            int eggNotBreaks = dropEgg(n-floor,noOfEggs,cache);
+            int curMoves = Math.max(eggBreaks,eggNotBreaks)+1;
+            minMoves = Math.min(minMoves,curMoves);
         }
-        return  dp[floor] = mini;
+        return cache[n][noOfEggs] = minMoves;
     }
+
     public int twoEggDrop(int n) {
-        Integer dp[] = new Integer[n+1];
-        return rec(n,dp);
+        Integer cache[][] = new Integer[n+1][3];
+        return dropEgg(n,2,cache);
     }
 }
