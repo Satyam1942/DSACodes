@@ -1,28 +1,21 @@
 class Solution {
-    double filled(int poured, int queryRow, int queryGlass, Double cache[][]){
-        if(queryRow<0 || queryGlass<0 || queryGlass>queryRow)
-            return 0.0;
-        if(queryRow==0 && queryGlass==0)
-            return (double)poured;
-        if(cache[queryRow][queryGlass]!=null)
-            return cache[queryRow][queryGlass];
-        
-        double upLeft = filled(poured,queryRow-1,queryGlass-1,cache);
-        double upRight = filled(poured,queryRow-1,queryGlass,cache);
+    double rec(int row, int col, int poured, Double cache[][]){
+        if(row==0 && col==0)
+            return poured;
+        if(cache[row][col]!=null)
+            return cache[row][col];
 
-        double leftRes = (upLeft-1)/2.0;
-        double rightRes = (upRight-1)/2.0;
+        double leftUp = (col-1>=0)?rec(row-1,col-1,poured,cache):0;
+        double rightUp = (col<=row-1)?rec(row-1,col,poured,cache):0;
+     
+        double leftFilled  = Math.max((leftUp-1)/2.0, 0);
+        double rightFilled = Math.max((rightUp-1)/2.0,0);
 
-        if(leftRes<0)
-            leftRes = 0.0;
-        if(rightRes<0)
-            rightRes = 0.0;
-
-        return cache[queryRow][queryGlass] = leftRes+rightRes;           
+        return cache[row][col] = leftFilled+rightFilled;
     }
     public double champagneTower(int poured, int query_row, int query_glass) {
-        Double cache[][] = new Double[100][100];
-        double ans = filled(poured,query_row,query_glass,cache);
-        return Math.min(1,ans);
+        Double cache[][] = new Double[query_row+1][query_glass+1];
+        double res =  rec(query_row, query_glass, poured,cache);
+        return Math.min(1,res);
     }
 }
