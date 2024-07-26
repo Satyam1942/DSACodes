@@ -1,38 +1,43 @@
 class Solution {
-
-    int getFloorIndex(List<Integer> sorted, int height)
-    {
+    int getCeilIndex(int curElement, List<Integer> lis){
         int left = 0;
-        int right = sorted.size()-1;
-        int maxIndex = right;
-        while(left<=right)
-        {
+        int right = lis.size()-1;
+        int ceilIndex = right;
+        while(left<=right){
             int mid = (left+right)/2;
-            if(sorted.get(mid)>=height) {right = mid-1; maxIndex= mid;}
-            else left = mid+1;
+            if(lis.get(mid)>=curElement){
+                right = mid-1;
+                ceilIndex = mid;
+            }else{
+                left = mid+1;
+            }
         }
-
-        return maxIndex;
+        return ceilIndex;
     }
 
     public int maxEnvelopes(int[][] envelopes) {
-        Arrays.sort(envelopes, (a,b)->((a[0]==b[0])?b[1]-a[1]:a[0]-b[0]));
-        List<Integer> sorted = new ArrayList<>();
-        //find Longest Increasing Subsequence wrt height using  Binary Search
+        int noOfEnvelopes = envelopes.length;
+        Arrays.sort(envelopes,(a,b)->((a[0]==b[0])?b[1]-a[1]:a[0]-b[0]));
 
-        sorted.add(envelopes[0][1]);
-        for(int i=1;i<envelopes.length;i++)
-        {
-            int height = envelopes[i][1];
-            if(height>sorted.get(sorted.size()-1)) sorted.add(height);
-            else
-            {
-                int index = getFloorIndex(sorted,height);
-                sorted.set(index,height);
+        List<Integer> lis = new ArrayList<>();
+        lis.add(envelopes[0][1]);
+
+        for(int i=1;i<noOfEnvelopes;i++){
+            int prevElement  = lis.get(lis.size()-1);
+            int curElement = envelopes[i][1];
+            if(prevElement < curElement)
+                lis.add(envelopes[i][1]);
+            else{
+                int changeIndex = getCeilIndex(curElement,lis);
+                lis.set(changeIndex,envelopes[i][1]);
             }
+ 
         }
-        
-        return sorted.size();
 
+        return lis.size();
     }
 }
+/*
+   
+
+ */
