@@ -1,5 +1,6 @@
 class Solution {
     public int latestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {
+
         Arrays.sort(buses);
         Arrays.sort(passengers);
         int i=0,j=0;
@@ -14,23 +15,18 @@ class Solution {
 
             if(i==(buses.length-1)){
                 j--;
+                int time = 0;
                 if(tempCapacity>0){
-                    int time = buses[i];
-                    while(j>=0 && passengers[j]==time){
-                        j--;
-                        time--;
-                    }
-                    res = time;
+                    time = buses[i];
                 }else{
-                    int time = passengers[j]-1;
-                    j--;
-                    while(j>=0 && passengers[j]==time){
+                    time = passengers[j];
+                }
+
+                while(j>=0 && passengers[j]==time){
                         j--;
                         time--;
-                    }
-                   
-                    res = time;
                 }
+                res = time;
             }
         }
         
