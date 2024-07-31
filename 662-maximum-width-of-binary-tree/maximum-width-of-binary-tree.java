@@ -13,44 +13,52 @@
  *     }
  * }
  */
- class Pair
-{
-    int nodeNum ;
+class Pair{
     TreeNode node;
-    Pair(TreeNode node, int nodeNum)
-    {
-        this.node= node;
-        this.nodeNum = nodeNum;
+    int width;
+    Pair(TreeNode node, int width){
+        this.node = node;
+        this.width = width;
     }
 }
 
 class Solution {
     public int widthOfBinaryTree(TreeNode root) {
-        
-        if(root==null) return 0;
         Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(root,1));
+        q.add(new Pair(root,0));
+        int maxWidth = 0;
 
-        int maxmWidth = 0;
-        while(!q.isEmpty())
-        {
+        while(!q.isEmpty()){
             int size = q.size();
-            int first = 0 ,last = 0;
-            for(int i =0;i<size;i++)
-            {
+            int last = 0 ,first = 0;
+            int startIndex = 0;
+            for(int i=0;i<size;i++){
                 TreeNode cur = q.peek().node;
-                int nodeNum = q.peek().nodeNum;
+                int width = q.peek().width;
                 q.poll();
 
-                if(i==0) first = nodeNum;
-                if(i==size-1) last = nodeNum;
-                
-                if(cur.left!=null)q.add(new Pair(cur.left,2*nodeNum-first));
-                if(cur.right!=null)q.add(new Pair(cur.right,2*nodeNum-first+1));
+                if(i==0){
+                    first = width;
+                    startIndex = 2*width+1;
+                }
+
+                if(i==size-1){
+                   last = width;
+                }
+
+                if(cur.left!=null)
+                    q.add(new Pair(cur.left,2*width+1-startIndex));
+                if(cur.right!=null)
+                    q.add(new Pair(cur.right,2*width+2-startIndex));
             }
-            maxmWidth = Math.max(maxmWidth,last-first+1);
+                maxWidth = Math.max(maxWidth,last-first+1); 
         }
 
-        return maxmWidth;
+        return maxWidth;
     }
 }
+/*
+    0
+    1           2
+    2  3        4 5
+ */
