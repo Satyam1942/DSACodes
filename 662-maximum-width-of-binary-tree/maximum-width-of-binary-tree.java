@@ -47,9 +47,9 @@ class Solution {
                 }
 
                 if(cur.left!=null)
-                    q.add(new Pair(cur.left,2*width+1-startIndex));
+                    q.add(new Pair(cur.left,2*width));
                 if(cur.right!=null)
-                    q.add(new Pair(cur.right,2*width+2-startIndex));
+                    q.add(new Pair(cur.right,2*width+1));
             }
                 maxWidth = Math.max(maxWidth,last-first+1); 
         }
