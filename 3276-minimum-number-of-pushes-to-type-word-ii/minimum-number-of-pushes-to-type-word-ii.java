@@ -1,17 +1,25 @@
 class Solution {
-    public int minimumPushes(String word) {
+    void calculateFrequency(String word, int freq[]){
         int length = word.length();
-        int freq[] = new int[26];
         for(int i=0;i<length;i++){
             char token = word.charAt(i);
             freq[(int)token-97]++;
         }
-       
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
-        for(int i=0;i<26;i++){
+    }
+
+    void orderByFrequency(int freq[], PriorityQueue<Integer> pq){
+         for(int i=0;i<26;i++){
             if(freq[i]!=0)
                 pq.add(freq[i]);
         }
+    }
+
+    public int minimumPushes(String word) {
+        
+        int freq[] = new int[26];
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
+        calculateFrequency(word,freq);
+        orderByFrequency(freq,pq);
 
         int totalKeys = 8;
         int noOfMappings = 0 ;
