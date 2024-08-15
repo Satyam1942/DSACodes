@@ -1,36 +1,50 @@
 class Solution {
-    // Returns number of pairs with absolute difference less than or equal to mid.
-    private int countPairs(int[] a, int mid) {
-        int n = a.length, res = 0;
-        for (int i = 0; i < n; ++i) {
-            int j = i;
-            while (j < n && a[j] - a[i] <= mid) j++;
-            res += j - i - 1;
+    boolean isPossible(int dif, int nums[], int k){
+        int length = nums.length;
+        int rank = 0;
+
+        for(int i=0;i<length;i++) {
+            int j=i;
+            while(j<length && nums[j]-nums[i]<=dif)
+                j++;
+            rank+=j-i-1;
         }
-        return res;
+
+        return rank>=k;
+    }
+    
+    int getMinDif(int nums[]){
+        int length = nums.length;
+        int minDif = Integer.MAX_VALUE;
+        for(int i=0;i<length-1;i++){
+            minDif = Math.min(minDif,nums[i+1]-nums[i]);
+        }
+        return minDif;
     }
 
-    public int smallestDistancePair(int a[], int k) {
-        int n = a.length;
-        Arrays.sort(a);
+    int getMaxDif(int nums[]){
+        int length = nums.length;
+        return nums[length-1]-nums[0];
+    }
 
-        // Minimum absolute difference
-        int low = a[1] - a[0];
-        for (int i = 1; i < n - 1; i++)
-            low = Math.min(low, a[i + 1] - a[i]);
+    public int smallestDistancePair(int[] nums, int k) {
+        Arrays.sort(nums);
 
-        // Maximum absolute difference
-        int high = a[n - 1] - a[0];
+        int left = getMinDif(nums);
+        int right =  getMaxDif(nums);
+        int kthSmallestDistance = right;
 
-        // Do binary search for k-th absolute difference
-        while (low < high) {
-            int mid = low + (high - low) / 2;
-            if (countPairs(a, mid) < k)
-                low = mid + 1;
-            else
-                high = mid;
+        while(left<=right){
+            int mid = (left+right)/2;
+            if(isPossible(mid,nums,k)){
+                right = mid-1;
+                kthSmallestDistance = mid;
+            }else
+                left = mid+1;
         }
 
-        return low;
+        return kthSmallestDistance;
+
+
     }
 }
