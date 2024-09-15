@@ -45,6 +45,9 @@ class Solution {
 /*
    eleetminicoworoep
        a e i o u
+
+    using hashmap to map integer with integer
+    first is hashing number which maps with  the first index where we got that hashing number
     32 = -1  
     23 = 0
     23
@@ -54,7 +57,12 @@ class Solution {
     
     using hashmap of integer , integer (bit mask)
     in bit mask  if all bits are set it means all are even ; ie if number is 31
-    and for each vowel toggle the bit
+    and for each vowel toggle the bit (using xor operator)
 
-   maxLength = 3
+    if(the value is in map just subtract with index to get max length)
+    else add it to hashmap
+
+    why it works whenver same number comes it means the number of vowels in between 
+    were all zero ; ie no change happened to all bits
+
  */
