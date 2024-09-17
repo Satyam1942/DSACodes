@@ -12,22 +12,19 @@ class Solution {
     public int findMinDifference(List<String> timePoints) {
         List<Integer> minutes = new ArrayList<>();
         convertToMins(minutes,timePoints);
+        Collections.sort(minutes);
 
         int numberOfTimePoints = timePoints.size();
         int numberOfMinsInDay = 1440;
         int minMinuteDifference = Integer.MAX_VALUE;
 
-        for(int i=0;i<numberOfTimePoints;i++){
-            for(int j=i+1;j<numberOfTimePoints;j++){
-                int min1 = minutes.get(i);
-                int min2 = minutes.get(j);
-                int difference1 = Math.abs(min2-min1);
-                int difference2 = numberOfMinsInDay - Math.max(min2,min1) +  Math.min(min2,min1);
-                int minDif = Math.min(difference1,difference2);
-                minMinuteDifference = Math.min(minDif,minMinuteDifference);
-            }
+        for(int i=0;i<numberOfTimePoints-1;i++){
+            int curDif =  minutes.get(i+1)-minutes.get(i);
+            minMinuteDifference = Math.min(minMinuteDifference,curDif);
         }
 
+        int curDif = (numberOfMinsInDay - minutes.get(numberOfTimePoints-1))+minutes.get(0);
+        minMinuteDifference = Math.min(minMinuteDifference,curDif);
         return minMinuteDifference;
     }
 }
