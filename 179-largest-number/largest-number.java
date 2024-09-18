@@ -2,12 +2,7 @@ class CustomComparator implements Comparator<String>{
     public int compare(String a, String b){
         String c = a+b;
         String d = b+a;
-        if(c.equals(d))
-            return -1;
-        long valC = Long.valueOf(c);
-        long valD = Long.valueOf(d);
-
-        return Long.compare(valD,valC);
+        return d.compareTo(c);
     }
 }
 
