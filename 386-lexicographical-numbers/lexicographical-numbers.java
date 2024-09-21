@@ -1,25 +1,26 @@
-class Node{
+class Node {
     Node links[];
     boolean flag;
-    Node(){
-        links = new Node[26];
+
+    Node() {
+        links = new Node[10];
         flag = false;
     }
 
-    boolean containsKey(int key){
-        return links[key]!=null;
+    boolean containsKey(char token) { 
+        return links[(int)token-48]!=null; 
     }
 
-    void put(int digit){
-        links[digit] = new Node();
+    Node get(char token) {
+        return links[(int)token-48];
     }
 
-    Node get(int digit){
-        return links[digit];
+    void put(char token) {
+        links[(int)token-48] = new Node();
     }
 
-    void setFlag(boolean ans){
-        flag = ans;
+    void setFlag(){
+        flag = true;
     }
 
     boolean getFlag(){
@@ -27,54 +28,48 @@ class Node{
     }
 }
 
-class Trie{
+class Trie {
     Node node;
-    Trie(){
+
+    Trie() {
         node = new Node();
     }
 
-    void insert(int num){
+    void insertNumber(int num) {
         Node temp = node;
-        String str = String.valueOf(num);
-        for(int i=0;i<str.length();i++){
-            int digit = (int)str.charAt(i)-48;
-            if(!temp.containsKey(digit)){
-                temp.put(digit);
-            }
-            temp = temp.get(digit);
+        String strNum = String.valueOf(num);
+        int length = strNum.length();
+        for(int i=0;i<length;i++){
+            char token = strNum.charAt(i);
+            if(!temp.containsKey(token))
+                temp.put(token);
+            temp = temp.get(token);
         }
-        temp.setFlag(true);
-    } 
-
+        temp.setFlag();
+    }
 }
 
 class Solution {
-
-    void getNumbersLexicographical(Node node, int temp, List<Integer> list){
+    public void getNumbersInOrder(Node node, int tempNum , List<Integer> orderedList){
         if(node.getFlag())
-            list.add(temp);
+            orderedList.add(tempNum);
 
         for(int i=0;i<=9;i++){
-            if(node.containsKey(i)){
-                temp*=10;
-                temp+=i;
-                getNumbersLexicographical(node.get(i),temp,list);
-                temp-=i;
-                temp/=10;
+            char token = (char)(i+48);
+            if(node.containsKey(token)){
+                getNumbersInOrder(node.get(token), tempNum*10+i, orderedList);
             }
         }
     }
 
     public List<Integer> lexicalOrder(int n) {
         Trie trie = new Trie();
-        for(int i=1;i<=n;i++){
-            trie.insert(i);
-        }
+        List<Integer> sortedList = new ArrayList<>();
 
-        List<Integer> ans = new ArrayList<>();
-        getNumbersLexicographical(trie.node,0,ans);
-
-        return ans;
-
+        for(int i=1;i<=n;i++)
+            trie.insertNumber(i);
+   
+        getNumbersInOrder(trie.node, 0, sortedList);
+        return sortedList;
     }
 }
