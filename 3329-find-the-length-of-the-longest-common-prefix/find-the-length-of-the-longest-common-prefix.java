@@ -1,10 +1,10 @@
 class Node {
     Node links[];
-    boolean flag;
+    boolean isNumberComplete;
 
     Node() {
         links = new Node[10];
-        flag = false;
+        isNumberComplete = false;
     }
 
     boolean containsKey(int digit) {
@@ -19,12 +19,12 @@ class Node {
         return links[digit];
     }
 
-    boolean getFlag() {
-        return flag;
+    boolean getIsNumberComplete() {
+        return isNumberComplete;
     }
 
-    void  setFlag() {
-        flag = true;
+    void  setIsNumberComplete() {
+        isNumberComplete = true;
     }
 }
 
@@ -55,7 +55,7 @@ class Trie {
             }
             temp = temp.get(digit);
         }
-        temp.setFlag();
+        temp.setIsNumberComplete();
     }
 
     int longestCommonPrefix(int number) {
@@ -80,6 +80,7 @@ class Trie {
 class Solution {
     public int longestCommonPrefix(int[] arr1, int[] arr2) {
         Trie trie = new Trie();
+        
         for(int number : arr2) {
             trie.insertNumber(number);
         }
