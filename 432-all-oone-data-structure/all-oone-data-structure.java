@@ -1,72 +1,154 @@
-class AllOne {
-    class Node {
-        int count;
-        Set<String> keys = new HashSet<>(); 
-        Node l, r;
-        Node(String key, int count) {
-            this.keys.add(key);
-            this.count = count;
-        }
-        void insertRight(Node node) {
-            node.l = this;
-            node.r = this.r;
-            this.r.l = node;
-            this.r = node;
-        }
-        void remove() {
-            this.l.r = this.r;
-            this.r.l = this.l;
-        }
+class Node {
+    HashSet<String> setOfStrings;
+    int frequency;
+    Node  next;
+    Node prev;
+
+    Node(int frequency) {
+        setOfStrings = new HashSet<>();
+        this.frequency = frequency;
+        this.next = null;
+        this.prev = null;
     }
 
-    Map<String, Node> map = new HashMap<>();
-    Node head = new Node("", -1), tail = new Node("", -1);    
-    /** Initialize your data structure here. */
+    void addString(String str) {
+        setOfStrings.add(str);
+    }
+
+    void removeString(String str) {
+        setOfStrings.remove(str);
+    }
+}
+
+class DoublyLinkedList {
+    Node head;
+    Node tail;
+    DoublyLinkedList() {
+        head = new Node(0);
+        tail = new Node(0);
+
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    void addNode(Node prev, Node cur , Node next) {
+        prev.next = cur;
+        cur.prev = prev;
+        cur.next = next;
+        next.prev = cur;
+    }
+
+    void deleteNode (Node cur) {
+        Node prev = cur.prev;
+        Node next = cur.next;
+        prev.next = next;
+        next.prev = prev;
+        cur.next = null;
+        cur.prev = null;
+    }
+}
+
+class AllOne {
+    DoublyLinkedList dll;
+    HashMap<String,Integer> frequencyMap;
+    HashMap<Integer,Node> addressMap;
+
     public AllOne() {
-        head.r = tail;
-        tail.l = head;
+        dll = new DoublyLinkedList();
+        frequencyMap = new HashMap<>();
+        addressMap = new HashMap<>();
+        addressMap.put(0,dll.head);
     }
     
-      /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
-  public void inc(String key) {
-    Node node = head;       // if new key point to the head
-    if (map.containsKey(key))
-      node = map.get(key); // not new key, get from map
-    node.keys.remove(key); // remove current key from key
-    int count = node==head? 1: node.count+1; // count + 1
-    if (node.r.count != count) // inert a right node if its right node 's count is not equals to count+1
-      node.insertRight(new Node(key, count));
-    node.r.keys.add(key);     // put this key into its right node 's keys set    
-    map.put(key, node.r);     // map the key to the node with count+1 
-    if (node != head && node.keys.isEmpty()) // empty node which should be removed
-      node.remove();
-  }
+    public void inc(String key) {
+        int curFreq = frequencyMap.getOrDefault(key,0);
+        Node curNode = addressMap.get(curFreq);
 
-  /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
-  public void dec(String key) {
-    if (!map.containsKey(key)) return;
-    Node node = map.get(key);   // get current node from map
-    node.keys.remove(key);      // remove key from current node's keys set
-    if (node.count > 1) {       // find the count - 1 node
-      if (node.l.count != node.count-1) // inert a left node if its left node's count is not equals to count-1
-        node.l.insertRight(new Node(key, node.count-1));
-      node.l.keys.add(key);   // put this key into its left node 's keys set   
-      map.put(key, node.l);   // map the key to the node with count-1 
-    } else // remove the key if its count is 1
-        map.remove(key);
-    if (node.keys.isEmpty())  // empty node which should be removed
-      node.remove();
-  }
+        int newFreq = curFreq+1;
 
-  /** Returns one of the keys with maximal value. */
-  public String getMaxKey() {
-    if (tail.l == head) return "";
-    return tail.l.keys.iterator().next(); 
-  }
+        //create/modify new Node
+        if(addressMap.containsKey(newFreq)) {
+            Node newNode = addressMap.get(newFreq);
+            newNode.setOfStrings.add(key);
+        } else {
+            Node newNode  = new Node(newFreq);
+            newNode.setOfStrings.add(key);
+            Node nextNode = curNode.next;
+            dll.addNode(curNode,newNode,nextNode);
+            addressMap.put(newFreq,newNode);
+        }   
 
-  /** Returns one of the keys with Minimal value. */
-  public String getMinKey() {
-    if (head.r == tail) return "";
-    return head.r.keys.iterator().next();
-  }
+        frequencyMap.put(key,newFreq);
+
+        //delete / modify oldNode;
+        if(curNode!= dll.head && curNode.setOfStrings.size() == 1) {
+            dll.deleteNode(curNode);
+            addressMap.remove(curFreq);
+        } else {
+            curNode.setOfStrings.remove(key);
+        }
+    }
+    
+    public void dec(String key) {
+        int curFreq = frequencyMap.getOrDefault(key,0);
+        Node curNode = addressMap.get(curFreq);
+        int newFreq = curFreq-1;
+
+        if(newFreq!=0) {
+            //create/modify new Node
+            if(addressMap.containsKey(newFreq)) {
+                Node newNode = addressMap.get(newFreq);
+                newNode.setOfStrings.add(key);
+            } else {
+                Node newNode  = new Node(newFreq);
+                newNode.setOfStrings.add(key);
+                Node prevNode = curNode.prev;
+                dll.addNode(prevNode,newNode,curNode);
+                addressMap.put(newFreq,newNode);
+            }   
+            frequencyMap.put(key,newFreq);
+        } else {
+            frequencyMap.remove(key);
+        }
+
+
+        //delete / modify oldNode;
+        if(curNode!= dll.head && curNode.setOfStrings.size() == 1) {
+            dll.deleteNode(curNode);
+            addressMap.remove(curFreq);
+        } else {
+            curNode.setOfStrings.remove(key);
+        }
+    }
+    
+    public String getMaxKey() {
+        Node maxNode = dll.tail.prev;
+        StringBuilder maxKey = new StringBuilder();
+
+        for(String str : maxNode.setOfStrings) {
+            maxKey.append(str);
+            break;
+        }
+        return maxKey.toString();
+    }
+    
+    public String getMinKey() {
+        Node minNode = dll.head.next;
+        StringBuilder minKey = new StringBuilder();
+
+        for(String str : minNode.setOfStrings) {
+            minKey.append(str);
+            break;
+        }
+        return minKey.toString();   
+    }
 }
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
