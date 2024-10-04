@@ -1,33 +1,32 @@
 class Solution {
     boolean checkDivideTeams(int[] skill) {
         int length = skill.length;
-        int i = 1;
-        int j = length-2;
+        int left = 1;
+        int right = length-2;
         int sum = skill[0]+skill[length-1];
 
-        while(i<=j) {
-            int curSum = skill[i]+skill[j];
+        while(left<=right) {
+            int curSum = skill[left]+skill[right];
             if(sum!=curSum) {
                 return false;
             }
-            i++;
-            j--; 
+            left++;
+            right--; 
         }
         return true;
     }
 
     long calculateTeamChemistry(int[] skill) {
         int length = skill.length;
-        int i = 0;
-        int j = length-1;
+        int left = 0;
+        int right = length-1;
         long chemistry = 0;
 
-        while(i<=j) {
-            chemistry += skill[i]*skill[j];
-            i++;
-            j--;
+        while(left<=right) {
+            chemistry += skill[left]*skill[right];
+            left++;
+            right--;
         }
-
         return chemistry;
     }
 
