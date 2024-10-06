@@ -20,6 +20,5 @@ class Solution {
         }
    
         return index2<index1;
-
     }
 }
