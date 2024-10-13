@@ -8,8 +8,7 @@ class Pair {
 }
 
 class Solution {
-    public int[] smallestRange(List<List<Integer>> nums) {
-        List<Pair> combinedList = new ArrayList<>();
+    void preprocessList(List<List<Integer>> nums, List<Pair> combinedList) {
         int noOfList = nums.size();
         for(int i=0;i<noOfList;i++) {
             int sizeOfList = nums.get(i).size();
@@ -17,11 +16,17 @@ class Solution {
                 combinedList.add(new Pair(nums.get(i).get(j),i));
             }
         }
-
         Collections.sort(combinedList,(a,b)->(a.number-b.number));
+    }
+
+    public int[] smallestRange(List<List<Integer>> nums) {
+        List<Pair> combinedList = new ArrayList<>();
+        HashMap<Integer,Integer> freqMap = new HashMap<>();
+        int noOfList = nums.size();
+
+        preprocessList(nums, combinedList);
 
         int i=0,j=0;
-        HashMap<Integer,Integer> freqMap = new HashMap<>();
         int lengthOfAllList = combinedList.size();
         int start = 0, end = Integer.MAX_VALUE;
 
