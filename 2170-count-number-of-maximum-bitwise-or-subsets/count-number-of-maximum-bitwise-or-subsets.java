@@ -1,5 +1,5 @@
 class Solution {
-    int recursion(int index, int curBitOr, int maxBitOr, int nums[], Integer cache[][]) {
+    int recursion(int index, int curBitOr, int maxBitOr, int nums[]) {
         if(index == nums.length) {
             if(curBitOr==maxBitOr) {
                 return 1;
@@ -8,14 +8,10 @@ class Solution {
             }
         }
 
-        if(cache[index][curBitOr]!=null) {
-            return cache[index][curBitOr];
-        }
+        int notTakeOr = recursion(index+1, curBitOr, maxBitOr, nums);
+        int takeOr = recursion(index+1, curBitOr|nums[index], maxBitOr, nums);
 
-        int notTakeOr = recursion(index+1, curBitOr, maxBitOr, nums, cache);
-        int takeOr = recursion(index+1, curBitOr|nums[index], maxBitOr, nums, cache);
-
-        return cache[index][curBitOr] = takeOr+notTakeOr;
+        return takeOr+notTakeOr;
     }
 
     public int countMaxOrSubsets(int[] nums) {
@@ -25,8 +21,7 @@ class Solution {
         for(int i = 0;i<length;i++) {
             maxBitOr |= nums[i]; 
         }
-        
-        Integer cache[][] = new Integer[length+1][maxBitOr+1];
-        return recursion(0, 0, maxBitOr, nums, cache);
+
+        return recursion(0, 0, maxBitOr, nums);
     }
 }
