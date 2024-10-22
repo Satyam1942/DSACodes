@@ -23,8 +23,8 @@ class Solution {
             long levelSum = 0;
             while(size-->0) {
                 TreeNode temp = q.peek();
-                TreeNode left = q.peek().left;
-                TreeNode right = q.peek().right;
+                TreeNode left = temp.left;
+                TreeNode right = temp.right;
                 q.poll();
                 if(left!=null) {
                     q.add(left);
