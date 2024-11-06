@@ -33,7 +33,6 @@ class Solution {
                 currentMax = nums[i];
             }
         }
-        System.out.println(currentMin+" "+previousMax);
         return currentMin>=previousMax;
     }
 }
