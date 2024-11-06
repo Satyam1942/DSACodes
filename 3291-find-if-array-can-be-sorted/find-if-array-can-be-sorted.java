@@ -1,42 +1,39 @@
 class Solution {
-    boolean checkNoOfSetBits(int num1,int num2){
-        int noOfSetBits1 = 0;
-        int noOfSetBits2=0;
+    int checkNoOfSetBits(int num){
+        int noOfSetBits = 0;
         for(int i=0;i<32;i++){
-            if((num1&(1<<i))!=0)
-               noOfSetBits1++;
-            if((num2&(1<<i))!=0)
-               noOfSetBits2++;
+            if((num&(1<<i))!=0)
+               noOfSetBits++;
         }
         
-        return noOfSetBits1==noOfSetBits2;
-    }
-    
-    void swap(int arr[], int i, int j){
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+        return noOfSetBits;
     }
     
     public boolean canSortArray(int[] nums) {
-        
-        for(int i=0;i<nums.length;i++){
-            for(int j=0;j<nums.length-1;j++){
-                if(nums[j+1]<nums[j]){
-                    if(checkNoOfSetBits(nums[j+1],nums[j])){
-                        swap(nums,j+1,j);
-                    }
+        if(nums.length == 1) {
+            return true;
+        }
+
+        int currentMin = nums[0], currentMax = nums[0],  previousMax = Integer.MIN_VALUE;
+        int prevBitCount = checkNoOfSetBits(nums[0]);
+
+        for(int i=1;i<nums.length;i++){
+            int num = nums[i];
+            int curBitCount = checkNoOfSetBits(num);
+            if(curBitCount == prevBitCount) {
+                currentMin = Math.min(currentMin, num);
+                currentMax = Math.max(currentMax, num);
+            } else {
+                if(previousMax>currentMin) {
+                    return false;
                 }
+                prevBitCount = curBitCount;
+                previousMax = currentMax;
+                currentMin = nums[i];
+                currentMax = nums[i];
             }
         }
-        
-        for(int i=0;i<nums.length-1;i++){
-            if(nums[i+1]<nums[i])
-                return false;
-        }
-        
-        return true;
-        
-        
+        System.out.println(currentMin+" "+previousMax);
+        return currentMin>=previousMax;
     }
 }
