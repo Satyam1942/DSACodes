@@ -87,3 +87,14 @@ class Solution {
         return arrangement;
     }
 }
+
+/*
+    HierHolzer's algorithm : 
+    Nothing new same as question reconstruct itenary!
+    The key thing is to compute start node! 
+    Start node should be the node whose outdegree>indegree
+    For euler trail to exist :
+    at most one node should have outdegree-indegree = 1
+    and at most one node should have indegree-outdegree = 1
+    all other nodes should have same indegree and outdegree
+ */
