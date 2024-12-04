@@ -1,26 +1,39 @@
 class Solution {
-    public int minimizedMaximum(int n, int[] quantities) {
-        int start = 1, end = Integer.MIN_VALUE, result = 1; // answer will lie between 1 and max(quantities)
-        for(int quantity : quantities) {
-            end = Math.max(end, quantity);
+    long sumOfQuantities(int quantities[]) {
+        int length = quantities.length;
+        long sum = 0;
+        for(int i=0;i<length;i++) {
+            sum+=quantities[i];
         }
-        while(start <= end) {
-            int mid = start + (end - start) / 2;
-            if(check(quantities, n, mid)) {
-                result = mid; // We have found a potential answer but need to check if we can do better
-                end = mid - 1;
+        return sum;
+    }   
+
+    boolean isPossible(int quantities[], int n, long maxAmount) {
+        int length = quantities.length;
+      
+        for(int index = 0; index<length;index++) {
+            int curAmount = quantities[index];
+            int numberOfShops = (int)Math.ceil(curAmount/(double)maxAmount);
+            n-=numberOfShops;
+        }
+        return n>=0;
+    }
+
+    public int minimizedMaximum(int n, int[] quantities) {
+        long left = 1;
+        long right = sumOfQuantities(quantities);
+
+        long maxProducts = right;
+        while(left<=right) {
+            long mid = (left+right)/2;
+            if(isPossible(quantities,n,mid)) {
+                right = mid-1;
+                maxProducts = mid;
             } else {
-                start = mid + 1;
+                left = mid+1;
             }
         }
-        return result;
-    }
-    
-    private boolean check(int[] quantities, int n, int target) {
-        int count = 0;
-        for(int quantity : quantities) {
-            count += quantity % target == 0 ? quantity / target : quantity / target + 1;
-        }
-        return count <= n;
+
+        return (int)maxProducts;
     }
 }
