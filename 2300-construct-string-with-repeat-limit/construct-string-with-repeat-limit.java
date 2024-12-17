@@ -1,6 +1,10 @@
 class Pair {
     char token ;
     int freq ; 
+    Pair() {
+        token = '\0';
+        freq = 0;
+    }
     Pair(char token, int freq) {
         this.token = token;
         this.freq = freq;
@@ -19,7 +23,7 @@ class Solution {
             map.put(token,curFreq+1);
         }
 
-        Queue<Pair> q = new LinkedList<>();
+        Pair extra = new Pair();
 
         while(!map.isEmpty()) {
             char token = map.lastKey();
@@ -27,10 +31,11 @@ class Solution {
             int repeatTimes = 0;
             map.remove(token);
 
-            if(q.isEmpty()) {
+            if(extra.token=='\0') {
                 if(freq>repeatLimit){
                     repeatTimes = repeatLimit;
-                    q.add(new Pair(token, freq-repeatLimit));
+                    extra.token = token; 
+                    extra.freq = freq-repeatLimit;
                 } else {
                     repeatTimes = freq;
                 }
@@ -43,9 +48,10 @@ class Solution {
                 if(freq>1) {
                     map.put(token, freq-1);
                 }
-                char newToken = q.peek().token;
-                int newFreq= q.peek().freq;
-                q.poll();
+                char newToken = extra.token;
+                int newFreq= extra.freq;
+                extra.token = '\0';
+                extra.freq = 0;
                 map.put(newToken, newFreq);
             }
         }
