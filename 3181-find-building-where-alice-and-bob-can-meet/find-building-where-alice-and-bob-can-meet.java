@@ -25,18 +25,16 @@ class SegmentTree {
         }
 
         int mid = (leftIndex+rightIndex)/2;
-        if(maxIndex>=mid) {
-            return fetchVal(2*sgTreeIndex+2, mid+1, rightIndex, maxVal, maxIndex);
-        } else {
-            int ans = -1;
-            if(treeArr[2*sgTreeIndex+1]>maxVal) {
-               ans =  fetchVal(2*sgTreeIndex+1, leftIndex, mid, maxVal, maxIndex); 
-            }
-            if(ans!=-1) {
-                return ans;
-            }
-            return fetchVal(2*sgTreeIndex+2, mid+1, rightIndex, maxVal, maxIndex);      
+        int ans = -1;
+        if(maxIndex<mid && treeArr[2*sgTreeIndex+1]>maxVal) {
+            ans =  fetchVal(2*sgTreeIndex+1, leftIndex, mid, maxVal, maxIndex); 
         }
+
+        if(ans!=-1) {
+            return ans;
+        }
+        
+        return fetchVal(2*sgTreeIndex+2, mid+1, rightIndex, maxVal, maxIndex);      
     }
 }
 
@@ -47,8 +45,6 @@ class Solution {
 
         SegmentTree sgTree = new SegmentTree(length);
         sgTree.buildTree(0, 0, length-1, heights);
-
-        // System.out.println(Arrays.toString(sgTree.treeArr));
 
         int ans[] = new int[numberOfQueries];
         for(int i=0; i<numberOfQueries; i++) {
@@ -62,7 +58,6 @@ class Solution {
             int maxIndex = Math.max(aliceIndex, bobIndex);
             int maxVal = Math.max(heights[aliceIndex], heights[bobIndex]);
             if(heights[maxIndex]==maxVal && heights[aliceIndex]!=heights[bobIndex]) {
-                // System.out.println(i);
                 ans[i] = maxIndex;
                 continue;
             }
