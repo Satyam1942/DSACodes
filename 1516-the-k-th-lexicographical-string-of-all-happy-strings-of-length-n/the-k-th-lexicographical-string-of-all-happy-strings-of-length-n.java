@@ -5,12 +5,6 @@ class Solution {
         }
     
         StringBuilder sb = new StringBuilder();
-
-        if(n==1) {
-            sb.append((char)(k+96));
-            return sb.toString();
-        }
-        
         k--;
         
         int index  = k/(1<<(n-1));
