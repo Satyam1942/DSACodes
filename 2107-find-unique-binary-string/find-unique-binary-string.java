@@ -1,8 +1,25 @@
 class Solution {
     public String findDifferentBinaryString(String[] nums) {
-        StringBuilder ans= new StringBuilder();                  
-        for(int i=0; i<nums.length; i++)  
-            ans.append(nums[i].charAt(i) == '0' ? '1' : '0');          
-        return ans.toString();
+        int length = nums.length;
+        StringBuilder missingStr = new StringBuilder();
+        HashSet<String> dictionary = new HashSet<>();
+
+        for(int i =0; i<length; i++) {
+            missingStr.append("0");
+            dictionary.add(nums[i]);
+        }
+
+        if(!dictionary.contains(missingStr.toString())) {
+            return missingStr.toString();
+        }
+
+        for(int i=0; i<length; i++) {
+            missingStr.setCharAt(i, '1');
+            if(!dictionary.contains(missingStr.toString())) {
+                return missingStr.toString();
+            }
+        }
+
+        return "";
     }
 }
