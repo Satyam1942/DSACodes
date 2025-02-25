@@ -22,8 +22,6 @@ class Solution {
                 ans[i] = (i==0)?0:ans[i-1];
             }
         }
-        
-        // System.out.println(Arrays.toString(ans));
 
         long numberOfSubarrays = 0;
         for(int i=0; i<length;i++) {
