@@ -1,11 +1,5 @@
 class Solution {
     public long coloredCells(int n) {
-        return 1l * n * n + 1l * (n - 1) * (n - 1);
+        return (long)(n-1)*(long)(n-1) + (long)(n)*(long)n;
     }
 }
-
-/*
-    1 = 1
-    2 =  
-
-*/
