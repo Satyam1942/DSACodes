@@ -18,7 +18,6 @@ class Solution {
     }
 
     public int maximumCandies(int[] candies, long k) {
-        Arrays.sort(candies);
         long left = 1;
         long right = getSum(candies)/k;
         long maxCandies = 0;
