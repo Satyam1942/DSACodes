@@ -8,31 +8,31 @@ class Solution {
         int numberOfSupplies = supplies.length;
 
         for (int i = 0; i < numberOfSupplies; i++) {
-            supplySet.add(supplies[i]);
+            String supplyName = supplies[i];
+            supplySet.add(supplyName);
+            indegree.put(supplyName, 0);
+            adjList.put(supplyName, new ArrayList<>());
+        }
+
+        for (int i = 0; i < numberOfRecipes; i++) {
+            String recipeName = recipes[i];
+            recipeSet.add(recipeName);
+            indegree.put(recipeName, 0);
+            adjList.put(recipeName, new ArrayList<>());
         }
 
         for (int i = 0; i < numberOfRecipes; i++) {
             String recipeName = recipes[i];
             int numberOfIngredients = ingredients.get(i).size();
-            recipeSet.add(recipeName);
-            if (!indegree.containsKey(recipeName)) {
-                indegree.put(recipeName, 0);
-            }
-            if (!adjList.containsKey(recipeName)) {
-                adjList.put(recipeName, new ArrayList<>());
-            }
-            for (int j = 0; j < numberOfIngredients; j++) {
-                String ingredient = ingredients.get(i).get(j);
-                if (!indegree.containsKey(ingredient)) {
-                    indegree.put(ingredient, 0);
-                }
-                if (!adjList.containsKey(ingredient)) {
-                    adjList.put(ingredient, new ArrayList<>());
-                }
-                if (!supplySet.contains(recipeName)) {
+            if (!supplySet.contains(recipeName)) {
+                int curIndegree = indegree.get(recipeName);
+                indegree.put(recipeName, curIndegree + numberOfIngredients);
+                for (int j = 0; j < numberOfIngredients; j++) {
+                    String ingredient = ingredients.get(i).get(j);
+                    if(!adjList.containsKey(ingredient)) {
+                        continue;
+                    }
                     adjList.get(ingredient).add(recipeName);
-                    int curIndegree = indegree.get(recipeName);
-                    indegree.put(recipeName, curIndegree + 1);
                 }
             }
         }
@@ -42,14 +42,13 @@ class Solution {
         for (Map.Entry<String, Integer> i : indegree.entrySet()) {
             String node = i.getKey();
             int indegreeVal = i.getValue();
-            if (supplySet.contains(node) && indegreeVal == 0) {
+            if (indegreeVal == 0) {
                 q.add(node);
             }
         }
-       
+
         while (!q.isEmpty()) {
             String recipe = q.poll();
-            
             if (recipeSet.contains(recipe)) {
                 recipesPrepared.add(recipe);
             }
