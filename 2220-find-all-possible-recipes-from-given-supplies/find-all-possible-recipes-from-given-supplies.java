@@ -39,6 +39,7 @@ class Solution {
 
         Queue<String> q = new LinkedList<>();
         List<String> recipesPrepared = new ArrayList<>();
+        
         for (Map.Entry<String, Integer> i : indegree.entrySet()) {
             String node = i.getKey();
             int indegreeVal = i.getValue();
@@ -64,6 +65,7 @@ class Solution {
                 }
             }
         }
+
         return recipesPrepared;
     }
 }
