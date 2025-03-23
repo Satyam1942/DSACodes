@@ -1,49 +1,40 @@
 class Solution {
-
-    boolean isPossible(long startTime, int mana, int skill[], long time[]) {
-        long curTime = startTime;
-        int noOfWizard =  skill.length;
-        for(int j=1;j<=noOfWizard; j++) {
-            if(curTime<time[j]) {
-                return false;
-            }
-            curTime+= mana*skill[j-1];
-        }
-        return true;
-    }
-
     public long minTime(int[] skill, int[] mana) {
-        int noOfWizard =  skill.length;
-        int manaLength = mana.length;
-        long time[] = new long[noOfWizard+1];
-        
-        for(int i=0; i<manaLength; i++) {
-            int curMana = mana[i];
-            long left = time[0];
-            long right = time[noOfWizard];
-            long startTime = right;
+        int noOfWizard = skill.length;
+        int noOfPotions = mana.length;
+        long prefixSum[] = new long[noOfWizard];
+        long cache[] = new long[noOfWizard];
+        long endTime = 0;
 
-            while(left<=right) {
-                long mid = (left+right)/2;
-                if(isPossible(mid, mana[i], skill, time)) {
-                    right = mid-1;
-                    startTime = mid;
-                } else {    
-                    left = mid+1;
-                }
+        for(int i=0; i<noOfWizard; i++) {
+            prefixSum[i] = (i==0)? skill[i] : prefixSum[i-1]+skill[i];
+        }
+
+        for(int i=0;i<noOfWizard; i++) {
+            cache[i] = mana[0]*prefixSum[i];
+        }
+
+        for(int i=1; i<noOfPotions; i++) {
+            long startTime = cache[0];
+            for(int j=noOfWizard-1; j>0; j--) {
+                long predictedStartTime = cache[j]-mana[i]*prefixSum[j-1];
+                startTime = Math.max(startTime, predictedStartTime);
             }
-
-            time[0] = startTime;
-            for(int j=1;j<=noOfWizard; j++) {
-                time[j] = time[j-1]+mana[i]*skill[j-1];
+            for(int j=0; j<noOfWizard; j++) {
+                cache[j] = startTime + mana[i]*prefixSum[j];
             }
         }
 
-        return time[noOfWizard];
+        endTime = cache[noOfWizard-1];
+        return endTime;
     }
 }
 
 /*
-    60
-    nmlogT
+   prefixArray = 3, 8, 11, 20
+
+    step 1 calcute this prefix array
+    3, 8, 11, 20
+
+    start from max(prevStart+1, prevEnd - secondLastCur)
 */
