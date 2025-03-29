@@ -94,8 +94,8 @@ class Solution {
     12 = 6
     10 = 2
     6  = 3
-    for constructing this find next greater and subtract from curIndex
-    and sort the list in terms of value from largest to smalles
+    for constructing this find next greater and previous smaller and subtract from curIndex
+    and sort the list in terms of value from largest to smallest value
 
     a particular number can be part of array :
     1. a = pos of a number whose score is more ahead - curPos+1
