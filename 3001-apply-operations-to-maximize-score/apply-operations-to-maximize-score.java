@@ -73,7 +73,6 @@ class Solution {
             long num = scoreMap.peek()[0];
             long limit = scoreMap.peek()[1];
             scoreMap.poll();
-
             long pow = calcPow(num, Math.min(limit,(long)k));
             product = (product*pow)%mod;
             k-=limit;
@@ -95,7 +94,7 @@ class Solution {
     10 = 2
     6  = 3
     for constructing this find next greater and previous smaller and subtract from curIndex
-    and sort the list in terms of value from largest to smallest value
+    and multiply them and sort the list in terms of value from largest to smallest value
 
     a particular number can be part of array :
     1. a = pos of a number whose score is more ahead - curPos+1
