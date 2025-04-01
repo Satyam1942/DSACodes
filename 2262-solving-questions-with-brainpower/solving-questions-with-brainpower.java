@@ -1,21 +1,15 @@
 class Solution {
-    long getPoints(int index, int [][] questions, Long cache[]) {
-        if(index >= questions.length) {
-            return 0l;
-        }
-
-        if(cache[index]!=null) {
-            return cache[index];
-        }
-
-        long notSolve = getPoints(index+1, questions, cache);
-        long solve = questions[index][0] + getPoints(index+questions[index][1]+1, questions, cache);
-        return cache[index] = Math.max(solve, notSolve);
-    }
-
     public long mostPoints(int[][] questions) {
         int noOfQuestions = questions.length;
-        Long cache[] = new Long[noOfQuestions];
-        return getPoints(0, questions, cache);
+        Long cache[] = new Long[noOfQuestions+1];
+        cache[noOfQuestions] = 0l;
+        for(int index = noOfQuestions-1; index>=0 ; index--) {
+            long notSolve = cache[index+1];
+            int nextIndex = Math.min(index+questions[index][1]+1, noOfQuestions);
+            long solve = questions[index][0] + cache[nextIndex];
+            cache[index] = Math.max(solve, notSolve);
+        }
+
+        return cache[0];
     }
 }
