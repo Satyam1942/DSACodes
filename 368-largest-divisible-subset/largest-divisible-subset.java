@@ -29,10 +29,6 @@ class Solution {
             maxOfEachRow[index] = maxIndex;
         }
 
-        // for(int i=0;i<length;i++){
-        //     System.out.println(Arrays.toString(cache[i]));
-        // }
-
         int maxCount = 0, maxRow = 0;
         for(int i=0;i<length;i++){
             if(cache[i][length+1]>maxCount){
@@ -40,11 +36,7 @@ class Solution {
                 maxRow = i;
             }
         }
-
-  
-        // System.out.println(Arrays.toString(maxOfEachRow));
-        // System.out.println(i);
-
+        
         Stack<Integer> st = new Stack<>();
         int i = maxRow;
         
