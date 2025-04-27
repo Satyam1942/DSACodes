@@ -31,4 +31,9 @@ class Solution {
    1. use 3 pointers ; badIndex , minIndex, maxIndex 
    2. if(number is not in range) set bad index and reset min and max Index
    3. rest calculation is same as the above approach
+
+
+   for particular min and max subarray dont think about repaeating min max ahead
+   we always extend our subarrays backward so for ahead pointers answer will be  
+   covered when we encounter them.
 */
