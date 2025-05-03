@@ -1,9 +1,5 @@
 class Solution {
     boolean isPossible(int k, int tasks[], int workers[], int pills, int strength) {
-        if(k==0) {
-            return true;
-        }
-
         int noOfTasks = tasks.length;
         int noOfWorkers = workers.length;
         TreeMap<Integer,Integer> workerMap = new TreeMap<>();
