@@ -18,10 +18,9 @@ class Solution {
             Integer ceiling = workerMap.ceilingKey(tasks[i]);
             if(ceiling!=null) {
                 int freq = workerMap.get(ceiling);
+                workerMap.put(ceiling, freq-1);
                 if(freq==1) {
                     workerMap.remove(ceiling);
-                } else {
-                    workerMap.put(ceiling, freq-1);
                 }
             } else {
                 if(pills==0) {
@@ -34,10 +33,9 @@ class Solution {
                     return false;
                 } else {
                     int freq = workerMap.get(ceiling);
+                    workerMap.put(ceiling, freq-1);
                     if(freq==1) {
                         workerMap.remove(ceiling);
-                    } else {
-                        workerMap.put(ceiling, freq-1);
                     }
                 }
             }
