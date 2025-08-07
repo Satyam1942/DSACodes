@@ -28,16 +28,8 @@ class Solution {
             int neighborOfSecondElementPartner = map.get(secondElementPartner);
             int indexOfNeighborOfSecondElementPartner = indexMap.get(secondElementPartner);
 
-            if (neighborOfFirstElementPartner == secondElementPartner) {
-                row[i + 1] = firstElementPartner;
-                row[indexOfNeighborOfFirstElementPartner] = secondElement;
-                indexMap.put(secondElement, indexOfNeighborOfFirstElementPartner);
-                indexMap.put(firstElementPartner, i + 1);
-                map.put(firstElement, firstElementPartner);
-                map.put(firstElementPartner, firstElement);
-                map.put(secondElement, neighborOfFirstElementPartner);
-                map.put(neighborOfFirstElementPartner, secondElement);
-            } else if (neighborOfSecondElementPartner == firstElementPartner) {
+            if (neighborOfSecondElementPartner == firstElementPartner) {
+                // swipe first element of pair since its more optimal (creates 2 pair with one swipe)
                 row[i] = secondElementPartner;
                 row[indexOfNeighborOfSecondElementPartner] = firstElement;
                 indexMap.put(firstElement, indexOfNeighborOfSecondElementPartner);
@@ -47,6 +39,7 @@ class Solution {
                 map.put(secondElement, neighborOfFirstElementPartner);
                 map.put(neighborOfFirstElementPartner, secondElement);
             } else {
+                // swipe second element of pair
                 row[i + 1] = firstElementPartner;
                 row[indexOfNeighborOfFirstElementPartner] = secondElement;
                 indexMap.put(secondElement, indexOfNeighborOfFirstElementPartner);
