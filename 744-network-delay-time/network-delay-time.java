@@ -2,7 +2,7 @@ class Solution {
     int[] getTime(int source, List<List<int[]>> adjList) {
         int noOfNodes = adjList.size();
         int time[] = new int[noOfNodes];
-        Queue<int[]> q = new LinkedList<>();
+        PriorityQueue<int[]> q = new PriorityQueue<>((a,b)->(a[1]-b[1]));
         Arrays.fill(time, Integer.MAX_VALUE);
         q.add(new int[] {source, 0});
         time[source] = 0;
