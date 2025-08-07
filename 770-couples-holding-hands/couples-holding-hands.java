@@ -1,13 +1,10 @@
 class Solution {
     public int minSwapsCouples(int[] row) {
         int length = row.length;
-        HashMap<Integer, Integer> map = new HashMap<>();
         HashMap<Integer, Integer> indexMap = new HashMap<>();
         for (int i = 0; i < length; i += 2) {
             int u = row[i];
             int v = row[i + 1];
-            map.put(u, v);
-            map.put(v, u);
             indexMap.put(u, i);
             indexMap.put(v, i + 1);
         }
@@ -23,10 +20,10 @@ class Solution {
                 continue;
             }
 
-            int neighborOfFirstElementPartner = map.get(firstElementPartner);
             int indexOfNeighborOfFirstElementPartner = indexMap.get(firstElementPartner);
-            int neighborOfSecondElementPartner = map.get(secondElementPartner);
+            int neighborOfFirstElementPartner = row[indexOfNeighborOfFirstElementPartner];
             int indexOfNeighborOfSecondElementPartner = indexMap.get(secondElementPartner);
+            int neighborOfSecondElementPartner = row[secondElementPartner];
 
             if (neighborOfSecondElementPartner == firstElementPartner) {
                 // swipe first element of pair since its more optimal (creates 2 pair with one swipe)
@@ -34,20 +31,12 @@ class Solution {
                 row[indexOfNeighborOfSecondElementPartner] = firstElement;
                 indexMap.put(firstElement, indexOfNeighborOfSecondElementPartner);
                 indexMap.put(secondElementPartner, i);
-                map.put(firstElement, firstElementPartner);
-                map.put(firstElementPartner, firstElement);
-                map.put(secondElement, neighborOfFirstElementPartner);
-                map.put(neighborOfFirstElementPartner, secondElement);
             } else {
                 // swipe second element of pair
                 row[i + 1] = firstElementPartner;
                 row[indexOfNeighborOfFirstElementPartner] = secondElement;
                 indexMap.put(secondElement, indexOfNeighborOfFirstElementPartner);
                 indexMap.put(firstElementPartner, i + 1);
-                map.put(firstElement, firstElementPartner);
-                map.put(firstElementPartner, firstElement);
-                map.put(secondElement, neighborOfFirstElementPartner);
-                map.put(neighborOfFirstElementPartner, secondElement);
             }
             swipes++;
         }
