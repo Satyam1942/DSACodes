@@ -2,11 +2,8 @@ class Solution {
     public int minSwapsCouples(int[] row) {
         int length = row.length;
         HashMap<Integer, Integer> indexMap = new HashMap<>();
-        for (int i = 0; i < length; i += 2) {
-            int u = row[i];
-            int v = row[i + 1];
-            indexMap.put(u, i);
-            indexMap.put(v, i + 1);
+        for (int i = 0; i < length; i ++) {
+            indexMap.put(row[i], i);
         }
 
         int swipes = 0;
