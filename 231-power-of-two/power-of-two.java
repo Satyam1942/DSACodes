@@ -1,9 +1,5 @@
 class Solution {
     public boolean isPowerOfTwo(int n) {
-        if(n<0) {
-            return false;
-        }
-        int setBitCount = Integer.bitCount(n);
-        return setBitCount == 1;
+        return n>0 && ((n&n-1) == 0);
     }
 }
