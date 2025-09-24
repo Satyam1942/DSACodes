@@ -1,40 +1,49 @@
 class Solution {
     public int[] avoidFlood(int[] rains) {
-        int noOfLakes = rains.length;
-        int pumpLake[] = new int[noOfLakes];
-        TreeSet<Integer> zeroIndex = new TreeSet<>();
-        HashMap<Integer,Integer> map = new HashMap<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        TreeSet<Integer> zeroIndices = new TreeSet<>();
+        int length = rains.length;
+        int dryLake[] = new int[length];
 
-        for(int i=0;i<noOfLakes;i++){
-            int waterLevel = rains[i];
-            if(waterLevel==0){
-                zeroIndex.add(i);
-            }else{
-                if(map.containsKey(waterLevel)){
-                    int prevIndex = map.get(waterLevel);
-                    Integer index = zeroIndex.ceiling(prevIndex);
-                    if(index!=null){
-                        pumpLake[index] = waterLevel;
-                        zeroIndex.remove(index);
-                        map.remove(waterLevel);
-                    }else
-                        return new int[0];
+        for (int i = 0; i < length; i++) {
+            int lake = rains[i];
+            if (lake == 0) {
+                zeroIndices.add(i);
+            } else {
+                dryLake[i] = -1;
+                int pairIndex = map.getOrDefault(lake, -1);
+                if (pairIndex == -1) {
+                    map.put(lake, i);
+                } else {
+                    Integer pastZeroIndex = zeroIndices.ceiling(pairIndex);
+                    if (pastZeroIndex == null) {
+                        return new int[] {};
+                    } else {
+                        dryLake[pastZeroIndex] = lake;
+                        zeroIndices.remove(pastZeroIndex);
+                    }
+                    map.put(lake, i);
                 }
-
-                map.put(waterLevel,i);
-                pumpLake[i] = -1;
             }
         }
 
-        for(int ind: zeroIndex)
-            pumpLake[ind] = 1;
+        for (int i = 0; i < length; i++) {
+            if (dryLake[i] == 0) {
+                dryLake[i] = 1;
+            }
+        }
 
-        return pumpLake;
+        return dryLake;
     }
 }
 
 /*
-    I want to find  value that will come in future first and that has come in past
-    1       
-    2
-*/ 
+    
+    1-0
+    2-1
+    3-3
+
+    (0,2)
+    (0,4)
+           3, 3 2, 1
+*/
