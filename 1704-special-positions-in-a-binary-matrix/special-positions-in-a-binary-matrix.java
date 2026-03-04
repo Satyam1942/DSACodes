@@ -1,32 +1,36 @@
 class Solution {
     public int numSpecial(int[][] mat) {
-        int m = mat.length;
-        int n = mat[0].length;
-        int noOfZeroInRow[] = new int[m];
-        int noOfZeroInCol[] = new int[n];
-
-        for(int i=0;i<m;i++)
-        {
-            for(int j=0;j<n;j++)
-            {
-                if(mat[i][j]==0)
-                {
-                    noOfZeroInRow[i]++;
-                    noOfZeroInCol[j]++;
+        int noOfRows = mat.length;
+        int noOfCols = mat[0].length;
+        int specialPosCount = 0;
+        HashSet<Integer> specialCols = new HashSet<Integer>();
+        
+        for(int i=0; i<noOfRows; i++) {
+            int count = 0;
+            int curCol = 0;
+            for(int j=0; j<noOfCols; j++) {
+                if(mat[i][j]==1) {
+                    count++;
+                    curCol = j;
                 }
             }
-        }
-
-        int count = 0;
-        for(int i=0;i<m;i++)
-        {
-            for(int j=0;j<n;j++)
-            {
-                if(mat[i][j]==1 && noOfZeroInRow[i]==n-1 && noOfZeroInCol[j]==m-1) count++;
+            if(count==1) {
+                specialCols.add(curCol);
             }
         }
 
-        return count;
-        
+        for(int col: specialCols) {
+            int count = 0;
+            for(int i=0; i<noOfRows; i++) {
+                if(mat[i][col]==1) {
+                    count++;
+                }
+            }
+            if(count==1) {
+                specialPosCount++;
+            }
+        }
+
+        return specialPosCount;
     }
 }
