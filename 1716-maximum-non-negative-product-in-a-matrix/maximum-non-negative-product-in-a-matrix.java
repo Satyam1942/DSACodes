@@ -36,16 +36,13 @@ class Solution {
         if (maxi != Integer.MIN_VALUE) {
             maxi = (maxi * curElement);
         }
-                // System.out.println(mini+" "+maxi);
         Long temp[] = new Long[] { mini, maxi};
-                // System.out.println(Arrays.toString(temp));
         return cache[i][j] = temp;
     }
 
     public int maxProductPath(int[][] grid) {
         Long cache[][][] =new Long [grid.length][grid[0].length][2];
         Long temp[] = recursion(0, 0, grid, cache);
-        System.out.println(Arrays.toString(temp));
         long ans = Math.max(temp[0], temp[1])%mod;
         return (ans < 0) ? -1 : (int)ans;
     }
