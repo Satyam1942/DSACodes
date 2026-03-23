@@ -1,54 +1,52 @@
 class Solution {
     long mod = (long)(1e9+7);
-    long recursion(int curRow, int curCol, int isPathNegative, int grid[][], Long cache[][][]){
-        if(curRow==grid.length-1 && curCol==grid[0].length-1)
-            return grid[curRow][curCol];
+    Long[] recursion(int i, int j, int[][] grid, Long cache[][][]) {
+        int curElement = grid[i][j];
+        long mini = Long.MAX_VALUE;
+        long maxi = Long.MIN_VALUE;
 
-        if(cache[curRow][curCol][isPathNegative]!=null)
-            return cache[curRow][curCol][isPathNegative];
-
-        long down = Long.MIN_VALUE ,right = Long.MIN_VALUE;
-        int isCurValNegative = (grid[curRow][curCol]<0)? 1:0;
-            
-        if(curRow+1<grid.length)
-            down =  recursion(curRow+1,curCol, Math.abs(isPathNegative-isCurValNegative), grid,cache);
-        if(curCol+1<grid[0].length)
-            right = recursion(curRow,curCol+1,Math.abs(isPathNegative-isCurValNegative), grid,cache);
-     
-        if(down!=Long.MIN_VALUE)
-            down= down*(long)grid[curRow][curCol];
-        if(right!=Long.MIN_VALUE)
-            right= right*(long)grid[curRow][curCol];
-            
-        if(isPathNegative==0){
-            if(down<0 && right<0)
-                return cache[curRow][curCol][isPathNegative] = Long.MIN_VALUE;
-            else
-                return cache[curRow][curCol][isPathNegative] = Math.max(down,right);
+        if(cache[i][j][0]!=null ){
+            return cache[i][j];
         }
-        else{
-            
-            if(down==Long.MIN_VALUE)
-                down = Long.MAX_VALUE;
-            if(right==Long.MIN_VALUE)
-                right = Long.MAX_VALUE;
 
-            if(down>0 && right>0)
-                return cache[curRow][curCol][isPathNegative] = Long.MIN_VALUE;
-            else
-                return cache[curRow][curCol][isPathNegative] = Math.min(down,right);
+        if (j + 1 < grid[0].length) {
+            Long right[] = recursion(i, j + 1, grid, cache);
+            for (int k = 0; k < 2; k++) {
+                mini = Math.min(mini, right[k]);
+                maxi = Math.max(maxi, right[k]);
+            }
         }
+        if (i + 1 < grid.length) {
+            Long left[] = recursion(i + 1, j, grid, cache);
+            for (int k = 0; k < 2; k++) {
+                mini = Math.min(mini, left[k]);
+                maxi = Math.max(maxi, left[k]);
+            }
+        }
+
+        if (i+1 == grid.length && j+1 == grid[0].length) {
+            mini = 1;
+            maxi = 1;
+        }
+
+        if (mini != Long.MAX_VALUE) {
+            mini = (mini * curElement);
+        }
+
+        if (maxi != Integer.MIN_VALUE) {
+            maxi = (maxi * curElement);
+        }
+                // System.out.println(mini+" "+maxi);
+        Long temp[] = new Long[] { mini, maxi};
+                // System.out.println(Arrays.toString(temp));
+        return cache[i][j] = temp;
     }
 
     public int maxProductPath(int[][] grid) {
-        int length = grid.length;
-        int width = grid[0].length;
-        Long cache[][][] = new Long[length][width][2];
-        long res =  recursion(0,0,0,grid,cache);
-
-        if(res==Long.MIN_VALUE)
-            return -1;
-        else
-            return (int)(res%mod);
+        Long cache[][][] =new Long [grid.length][grid[0].length][2];
+        Long temp[] = recursion(0, 0, grid, cache);
+        System.out.println(Arrays.toString(temp));
+        long ans = Math.max(temp[0], temp[1])%mod;
+        return (ans < 0) ? -1 : (int)ans;
     }
 }
