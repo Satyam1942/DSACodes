@@ -21,7 +21,7 @@ class Solution {
         maxHash = Math.max(maxHash, hash);
 
         for(int i=newNums.length-1; i>=length; i--) {
-            hash = hash + (sum-newNums[i]) - (newNums[i]*(length-1));
+            hash = hash + sum- newNums[i]*length;
             maxHash = Math.max(maxHash, hash);
         }
 
